@@ -1,0 +1,16 @@
+{
+  "name": "neural-activity-visualizer-react",
+  "version": "1.0.0",
+  "description": "An ReactJS component for visualizing neural activity data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Andrew Davison <andrew.davison@cnrs.fr>, CNRS",
+  "license": "MIT",
+  "homepage": "https://github.com/NeuralEnsemble/neo-viewer#readme",
+  "devDependencies": {
+    "react": "^17.0.1"
+  }
+}
