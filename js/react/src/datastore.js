@@ -96,6 +96,37 @@ class DataStore {
         }
     }
 
+    getLabels(blockId) {
+        console.log(`Getting labels for block #${blockId}`);
+        console.log(this);
+        let labels = [{
+            label: "Segment #0",
+            signalLabels: ["Signal #0"]
+        }];
+        if (this.initialized) {
+            labels = this.blocks[blockId].segments.map((seg, iSeg) => {
+                //console.log(seg);
+                let signals = seg.analogsignals;
+                if (seg.as_prop) {
+                    signals = seg.as_prop;
+                }
+                //console.log(signals);
+                let signalLabels = signals.map((sig, iSig) => {
+                    return sig.name || `Signal #${iSig}`
+                });
+                if (signalLabels.length === 0) {
+                    signalLabels = ["Signal #0"];
+                }
+                return {
+                    label: seg.name || `Segment #${iSeg}`,
+                    signalLabels: signalLabels
+                };
+            });
+        }
+        console.log(labels);
+        return labels;
+    }
+
 }
 
 

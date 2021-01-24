@@ -12,6 +12,7 @@ export default function Visualizer(props) {
     const [signalId, setSignalId] = React.useState(0);
     const [showSpikeTrains, setShowSpikeTrains] = React.useState(false);
     const [downSampleFactor, setDownSampleFactor] = React.useState(1);
+    const [labels, setLabels] = React.useState([{label: "Segment #0", signalLabels: ["Signal #0"]}]);
     const [graphData, setGraphData] = React.useState(""); // {}
     const datastore = React.useRef(new DataStore(props.source));
 
@@ -49,6 +50,7 @@ export default function Visualizer(props) {
             .then(res => {
                 console.log(res);
                 console.log(datastore.current);
+                setLabels(datastore.current.getLabels(0));
                 setGraphData(`segment=${newSegmentId} signal=${newSignalId}`);
             });
     }
@@ -61,7 +63,7 @@ export default function Visualizer(props) {
                 downSampleFactor={props.downSampleFactor}
                 segmentId={segmentId}
                 signalId={signalId}
-
+                labels={labels}
                 showSpikeTrains={showSpikeTrains}
                 updateGraphData={updateGraphData}
             />

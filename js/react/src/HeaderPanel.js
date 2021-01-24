@@ -45,9 +45,11 @@ export default function HeaderPanel(props) {
                     onChange={handleChangeSegment}
                 >
                     <MenuItem value={"all"}>All</MenuItem>
-                    <MenuItem value={0}>0</MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
+                    {
+                        props.labels.map((seg, index) => {
+                            return <MenuItem value={index}>{seg.label}</MenuItem>
+                        })
+                    }
                 </Select>
             </FormControl>
             <FormControl className={classes.formControl}>
@@ -59,9 +61,11 @@ export default function HeaderPanel(props) {
                     onChange={handleChangeSignal}
                 >
                     <MenuItem value={"all"}>All</MenuItem>
-                    <MenuItem value={0}>0</MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
+                    {
+                        props.labels[props.segmentId].signalLabels.map((label, index) => {
+                            return <MenuItem value={index}>{label}</MenuItem>
+                        })
+                    }
                 </Select>
             </FormControl>
         </FormGroup>
