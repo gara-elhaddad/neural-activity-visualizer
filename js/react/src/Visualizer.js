@@ -24,6 +24,7 @@ export default function Visualizer(props) {
     const [downSampleFactor, setDownSampleFactor] = React.useState(1);
     const [labels, setLabels] = React.useState([{label: "Segment #0", signalLabels: ["Signal #0"]}]);
     const [graphData, setGraphData] = React.useState([]);
+    const [axisLabels, setAxisLabels] = React.useState({x: "", y: ""});
     const datastore = React.useRef(new DataStore(props.source));
 
     React.useEffect(() => {
@@ -67,6 +68,7 @@ export default function Visualizer(props) {
                             y: res.values
                         };
                     }));
+                    setAxisLabels({x: results[0].times_dimensionality, y: results[0].values_units});
                 });
         } else {
             datastore.current.getSignal(0, newSegmentId, newSignalId, props.downSampleFactor)
@@ -78,6 +80,7 @@ export default function Visualizer(props) {
                         x: generateTimes(res.values.length, res.t_start, res.sampling_period),
                         y: res.values
                     }]);
+                    setAxisLabels({x: res.times_dimensionality, y: res.values_units});
                 });
         }
     }
@@ -95,7 +98,7 @@ export default function Visualizer(props) {
                 showSpikeTrains={showSpikeTrains}
                 updateGraphData={updateGraphData}
             />
-            <GraphPanel data={graphData} />
+            <GraphPanel data={graphData} axisLabels={axisLabels} />
         </div>
     )
 
