@@ -14,6 +14,65 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
+
+function SegmentSelect(props) {
+    const classes = useStyles();
+
+    let menuItemAll = "";
+    if (props.consistent) {
+        menuItemAll = (<MenuItem value={"all"}>All</MenuItem>);
+    }
+
+    return (
+        <FormControl className={classes.formControl}>
+                <InputLabel id="select-segment-label">Segment</InputLabel>
+                <Select
+                    labelId="select-segment-label"
+                    id="select-segment"
+                    value={props.segmentId}
+                    onChange={props.onChange}
+                >
+                    {menuItemAll}
+                    {
+                        props.labels.map((seg, index) => {
+                            return <MenuItem value={index}>{seg.label}</MenuItem>
+                        })
+                    }
+                </Select>
+            </FormControl>
+    );
+}
+
+function SignalSelect(props) {
+    const classes = useStyles();
+
+    let segmentId = props.segmentId;
+    if (props.segmentId === "all") {
+        segmentId = 0;  // if plotting signals from all segments, the segments
+                        // have been checked for consistency, so we can take
+                        // the labels only from the first segment
+    }
+
+    return (
+        <FormControl className={classes.formControl}>
+            <InputLabel id="select-signal-label">Signal</InputLabel>
+            <Select
+                labelId="select-signal-label"
+                id="select-signal"
+                value={props.signalId}
+                onChange={props.onChange}
+            >
+                {
+                    props.labels[segmentId].signalLabels.map((label, index) => {
+                        return <MenuItem value={index}>{label}</MenuItem>
+                    })
+                }
+            </Select>
+        </FormControl>
+    )
+}
+
+
 export default function HeaderPanel(props) {
     const classes = useStyles();
 
@@ -36,38 +95,8 @@ export default function HeaderPanel(props) {
 
     return (
         <FormGroup row>
-            <FormControl className={classes.formControl}>
-                <InputLabel id="select-segment-label">Segment</InputLabel>
-                <Select
-                    labelId="select-segment-label"
-                    id="select-segment"
-                    value={props.segmentId}
-                    onChange={handleChangeSegment}
-                >
-                    <MenuItem value={"all"}>All</MenuItem>
-                    {
-                        props.labels.map((seg, index) => {
-                            return <MenuItem value={index}>{seg.label}</MenuItem>
-                        })
-                    }
-                </Select>
-            </FormControl>
-            <FormControl className={classes.formControl}>
-                <InputLabel id="select-signal-label">Signal</InputLabel>
-                <Select
-                    labelId="select-signal-label"
-                    id="select-signal"
-                    value={props.signalId}
-                    onChange={handleChangeSignal}
-                >
-                    <MenuItem value={"all"}>All</MenuItem>
-                    {
-                        props.labels[props.segmentId].signalLabels.map((label, index) => {
-                            return <MenuItem value={index}>{label}</MenuItem>
-                        })
-                    }
-                </Select>
-            </FormControl>
+            <SegmentSelect segmentId={props.segmentId} consistent={props.consistent} onChange={handleChangeSegment} labels={props.labels}/>
+            <SignalSelect segmentId={props.segmentId} signalId={props.signalId} onChange={handleChangeSignal} labels={props.labels}/>
         </FormGroup>
     );
 }

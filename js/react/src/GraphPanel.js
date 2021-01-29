@@ -1,5 +1,20 @@
 import React from 'react';
+import Plot from 'react-plotly.js';
 
 export default function GraphPanel(props) {
-    return <div>graph goes here with data {props.data}</div>
+    const lineProperties = {
+        type: 'scatter',
+        lines: 'lines' //,
+        //marker: {color: 'green'},
+    };
+    const data = props.data.map(trace => {
+        return {...lineProperties, ...trace}
+    });
+    console.log(data);
+    return (
+        <Plot
+          data={data}
+          layout={ {width: 800, height: 400} }
+        />
+      );
 }

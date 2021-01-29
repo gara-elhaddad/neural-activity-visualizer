@@ -1,4 +1,5 @@
 import Visualizer from 'neural-activity-visualizer-react';
+//import Visualizer from './Visualizer';
 
 function App() {
   return (

@@ -2,6 +2,12 @@ import axios from 'axios';
 
 const baseUrl = "https://neo-viewer.brainsimulation.eu";
 
+
+function range(n) {
+    return [...Array(n).keys()];
+}
+
+
 class DataStore {
     constructor(datafileUrl) {
         this.datafileUrl = datafileUrl;
@@ -49,6 +55,19 @@ class DataStore {
         }
     }
 
+    spikeTrainsAreLoaded(blockId, segmentId) {
+        if (this.segmentIsLoaded(blockId, segmentId)) {
+            const stArray = this.blocks[blockId].segments[segmentId].spiketrains;
+            if (stArray.length > 0 && stArray[0].t_stop) {
+                return true
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     loadSegment(blockId, segmentId) {
         const url = `${baseUrl}/segmentdata/?url=${this.datafileUrl}&segment_id=${segmentId}`;
         const config = {};
@@ -63,6 +82,14 @@ class DataStore {
         console.log(`Trying to load signal #${signalId} in segment #${segmentId}`);
         return axios.get(url, config)
             .catch(err => Promise.reject(`Error loading signal #${signalId} in segment #${segmentId}: ${err.message}`));
+    }
+
+    loadSpikeTrains(blockId, segmentId) {
+        const url = `${baseUrl}/spiketraindata/?url=${this.datafileUrl}&segment_id=${segmentId}`;
+        const config = {};
+        console.log(`Trying to load spiketrains for #${segmentId}`);
+        return axios.get(url, config)
+            .catch(err => Promise.reject(`Error loading spiketrain data from segment #${segmentId}: ${err.message}`));
     }
 
     getSignal(blockId, segmentId, signalId, downSampleFactor) {
@@ -91,6 +118,44 @@ class DataStore {
                 .then(res => {
                     console.log(`3b. Loaded signal for signal #${signalId} in segment #${segmentId}`);
                     this.blocks[blockId].segments[segmentId].analogsignals[signalId] = res.data;
+                    return res.data;
+                });
+        }
+    }
+
+    getSignalsFromAllSegments(blockId, signalId, downSampleFactor) {
+        const promises = range(this.blocks[blockId].segments.length).map(segmentId => {
+            return this.getSignal(blockId, segmentId, signalId, downSampleFactor);
+        });
+        return Promise.all(promises);
+    }
+
+    getSpikeTrains(blockId, segmentId) {
+        if (this.segmentIsLoaded(blockId, segmentId)) {
+            if (this.spikeTrainsAreLoaded(blockId, segmentId)) {
+                console.log(`1. Returning already-loaded spiketrains in segment #${segmentId}`);
+                return new Promise((resolve, reject) => {
+                    resolve(this.blocks[blockId].segments[segmentId].spiketrains);
+                    reject();
+                });
+            } else {
+                return this.loadSpikeTrains(blockId, segmentId)
+                    .then(res => {
+                        console.log(`2. Loaded spiketrains in segment #${segmentId}`);
+                        this.blocks[blockId].segments[segmentId].spiketrains = res.data;
+                        return res.data;
+                    });
+            }
+        } else {
+            return this.loadSegment(blockId, segmentId)
+                .then(res => {
+                    console.log(`3a. Loaded data for segment #${segmentId}`);
+                    this.blocks[blockId].segments[segmentId] = res.data;
+                    return this.loadSpikeTrains(blockId, segmentId);
+                })
+                .then(res => {
+                    console.log(`3b. Loaded spiketrains in segment #${segmentId}`);
+                    this.blocks[blockId].segments[segmentId].spiketrains = res.data;
                     return res.data;
                 });
         }
@@ -125,6 +190,11 @@ class DataStore {
         }
         console.log(labels);
         return labels;
+    }
+
+    isConsistentAcrossSegments(blockId) {
+        console.log(`Consistency: ${this.blocks[blockId].consistency}`);
+        return (this.blocks[blockId].consistency === "consistent");
     }
 
 }
