@@ -86,11 +86,11 @@ export default function HeaderPanel(props) {
         console.log(event.target.value);
         console.log(typeof event.target.value);
 
-        props.updateGraphData(event.target.value, props.signalId);
+        props.updateGraphData(event.target.value, props.signalId, props.showSignals, props.showSpikeTrains);
     };
 
     const handleChangeSignal = (event) => {
-        props.updateGraphData(props.segmentId, event.target.value);
+        props.updateGraphData(props.segmentId, event.target.value, props.showSignals, props.showSpikeTrains);
     };
 
     return (

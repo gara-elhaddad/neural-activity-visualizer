@@ -1,15 +1,15 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 
-export default function GraphPanel(props) {
+export default function SpikeTrainPanel(props) {
     const lineProperties = {
         type: 'scatter',
-        mode: 'lines' //,
+        mode: 'markers'
         //marker: {color: 'green'},
     };
     if (props.show) {
-        const data = props.data.map(trace => {
-            return { ...lineProperties, ...trace }
+        const data = props.data.map(spikes => {
+            return { ...lineProperties, ...spikes }
         });
         console.log(data);
         return (
@@ -20,12 +20,12 @@ export default function GraphPanel(props) {
                     height: 400,
                     xaxis: {
                         title: {
-                            text: props.axisLabels.x
+                            text: `Time (${props.axisLabels.x})`
                         }
                     },
                     yaxis: {
                         title: {
-                            text: props.axisLabels.y
+                            text: "Spike Trains"
                         }
                     },
                 }}
