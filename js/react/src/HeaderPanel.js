@@ -17,6 +17,8 @@ import InfoIcon from '@material-ui/icons/Info';
 import InfoPanel from './InfoPanel';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const useStyles = makeStyles((theme) => ({
     controlBar: {
@@ -33,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     roundButtons: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
+        verticalAlign: "middle"
+    },
+    loadingIndicator: {
+        margin: theme.spacing(1),
         verticalAlign: "middle"
     }
 }));
@@ -93,6 +99,18 @@ function SignalSelect(props) {
                     }
                 </Select>
             </FormControl>
+        )
+    } else {
+        return ""
+    }
+}
+
+function LoadingAnimation(props) {
+    const classes = useStyles();
+
+    if (props.loading) {
+        return (
+            <CircularProgress className={classes.loadingIndicator} color="secondary" />
         )
     } else {
         return ""
@@ -176,6 +194,8 @@ export default function HeaderPanel(props) {
                     <GetAppIcon fontSize="medium" color="primary" />
                 </IconButton>
             </Tooltip>
+
+            <LoadingAnimation loading={props.loading} />
         </div>
     );
 }

@@ -43,6 +43,7 @@ export default function Visualizer(props) {
     const [axisLabels, setAxisLabels] = React.useState({x: "", y: ""});
     const [spikeTrainAxisLabels, setSpikeTrainAxisLabels] = React.useState({x: ""});
     const [errorMessage, setErrorMessage] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
 
     const datastore = React.useRef(new DataStore(props.source, props.baseUrl || defaultBaseUrl));
 
@@ -86,6 +87,7 @@ export default function Visualizer(props) {
 
     function updateGraphData(newSegmentId, newSignalId, showSignals, showSpikeTrains) {
         console.log(`segmentId=${newSegmentId} signalId=${newSignalId} showSignals=${showSignals} showSpikeTrains=${showSpikeTrains}`);
+        setLoading(true);
         setSegmentId(newSegmentId);
         setSignalId(newSignalId);
         setShowSignals(showSignals);
@@ -102,6 +104,7 @@ export default function Visualizer(props) {
                             };
                         }));
                         setAxisLabels({x: results[0].times_dimensionality, y: results[0].values_units});
+                        setLoading(false);
                     })
                     .catch(err => {
                         setErrorMessage(`There was a problem loading signal #${newSignalId} from all segments (${err})`);
@@ -120,6 +123,7 @@ export default function Visualizer(props) {
                             y: res.values
                         }]);
                         setAxisLabels({x: res.times_dimensionality, y: res.values_units});
+                        setLoading(false);
                     })
                     .catch(err => {
                         setErrorMessage(`There was a problem loading signal #${newSignalId} from segment #${newSegmentId} (${err})`);
@@ -130,6 +134,7 @@ export default function Visualizer(props) {
                     .then(res => {
                         setSpikeData(transformSpikeData(res));
                         setSpikeTrainAxisLabels({x: "ms"})  // todo: use 'units' from data
+                        setLoading(false);
                     })
                     .catch(err => {
                         setErrorMessage(`There was a problem loading spiketrains from segment #${newSegmentId} (${err})`);
@@ -152,6 +157,7 @@ export default function Visualizer(props) {
                 showSpikeTrains={showSpikeTrains}
                 updateGraphData={updateGraphData}
                 metadata={datastore.current.metadata(0)}
+                loading={loading}
             />
             <ErrorPanel message={errorMessage} />
             <GraphPanel
