@@ -151,6 +151,7 @@ export default function Visualizer(props) {
                 showSignals={showSignals}
                 showSpikeTrains={showSpikeTrains}
                 updateGraphData={updateGraphData}
+                metadata={datastore.current.metadata(0)}
             />
             <ErrorPanel message={errorMessage} />
             <GraphPanel

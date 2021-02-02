@@ -12,6 +12,11 @@ import TimelineIcon from '@material-ui/icons/Timeline';
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
+import InfoPanel from './InfoPanel';
+import GetAppIcon from '@material-ui/icons/GetApp';
+
 
 const useStyles = makeStyles((theme) => ({
     controlBar: {
@@ -23,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
     },
     controlButtons: {
         margin: theme.spacing(1),
+        verticalAlign: "middle"
+    },
+    roundButtons: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
         verticalAlign: "middle"
     }
 }));
@@ -92,6 +102,7 @@ function SignalSelect(props) {
 
 export default function HeaderPanel(props) {
     const classes = useStyles();
+    const [popoverAnchor, setPopoverAnchor] = React.useState(null);
 
     React.useEffect(() => {
         console.log(props);
@@ -123,6 +134,17 @@ export default function HeaderPanel(props) {
         };
     };
 
+    const handleShowInfo = (event) => {
+        setPopoverAnchor(event.currentTarget);
+      };
+
+    const handleHideInfo = () => {
+        setPopoverAnchor(null);
+    };
+
+    const infoOpen = Boolean(popoverAnchor);
+    const id = infoOpen ? 'info-panel' : undefined;
+
     return (
         <div className={classes.controlBar}>
             <ButtonGroup color="primary" aria-label="outlined primary button group" className={classes.controlButtons}>
@@ -136,6 +158,24 @@ export default function HeaderPanel(props) {
 
             <SegmentSelect segmentId={props.segmentId} consistent={props.consistent} onChange={handleChangeSegment} labels={props.labels} />
             <SignalSelect segmentId={props.segmentId} signalId={props.signalId} onChange={handleChangeSignal} labels={props.labels} show={props.showSignals} />
+
+            <Tooltip title="File metadata">
+                <IconButton onClick={handleShowInfo} aria-label="info" className={classes.roundButtons}>
+                    <InfoIcon fontSize="medium" color="primary" />
+                </IconButton>
+            </Tooltip>
+            <InfoPanel
+                id={id}
+                info={props.metadata}
+                open={infoOpen}
+                anchor={popoverAnchor}
+                onClose={handleHideInfo} />
+
+            <Tooltip title="Download data file">
+                <IconButton target="_blank" href={props.source} aria-label="download" className={classes.roundButtons}>
+                    <GetAppIcon fontSize="medium" color="primary" />
+                </IconButton>
+            </Tooltip>
         </div>
     );
 }

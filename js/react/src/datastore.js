@@ -198,6 +198,13 @@ class DataStore {
         return (this.blocks[blockId].consistency === "consistent");
     }
 
+    metadata(blockId) {
+        if (this.initialized) {
+            return this.blocks[blockId];
+        } else {
+            return {};
+        }
+    }
 }
 
 
