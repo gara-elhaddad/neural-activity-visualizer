@@ -16,8 +16,8 @@ export default function GraphPanel(props) {
             <Plot
                 data={data}
                 layout={{
-                    width: 800,
-                    height: 400,
+                    width: props.width || 1200,
+                    height: props.height || 400,
                     xaxis: {
                         title: {
                             text: props.axisLabels.x

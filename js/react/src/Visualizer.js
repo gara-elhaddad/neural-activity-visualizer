@@ -3,6 +3,7 @@ import DataStore from './datastore';
 import HeaderPanel from './HeaderPanel';
 import GraphPanel from './GraphPanel';
 import SpikeTrainPanel from './SpikeTrainPanel';
+import ErrorPanel from './ErrorPanel';
 
 
 const baseUrl = "https://neo-viewer.brainsimulation.eu";
@@ -19,8 +20,8 @@ function generateTimes(n, tStart, samplingPeriod) {
 function transformSpikeData(inputData) {
     console.log(inputData);
     return Object.entries(inputData).map(([key, value]) => {
-        console.log(key);
-        console.log(value);
+        //console.log(key);
+        //console.log(value);
         return {
             x: value.times,  // todo: scale by units?
             y: Array(value.times.length).fill(key)
@@ -41,6 +42,7 @@ export default function Visualizer(props) {
     const [spikeData, setSpikeData] = React.useState([]);
     const [axisLabels, setAxisLabels] = React.useState({x: "", y: ""});
     const [spikeTrainAxisLabels, setSpikeTrainAxisLabels] = React.useState({x: ""});
+    const [errorMessage, setErrorMessage] = React.useState("");
 
     const datastore = React.useRef(new DataStore(props.source));
 
@@ -70,6 +72,7 @@ export default function Visualizer(props) {
         datastore.current.initialize()
             .catch(err => {
                 console.log(`Error initializing datastore: ${err}`);
+                setErrorMessage(`Unable to read data file (${err})`);
             })
             .then(res => {
                 setConsistent(datastore.current.isConsistentAcrossSegments(0));
@@ -77,12 +80,16 @@ export default function Visualizer(props) {
             })
             .catch(err => {
                 console.log(`Error after initializing datastore: ${err}`);
+                setErrorMessage(`There was a problem reading data from the data file (${err})`);
             });
     }, []);
 
     function updateGraphData(newSegmentId, newSignalId, showSignals, showSpikeTrains) {
+        console.log(`segmentId=${newSegmentId} signalId=${newSignalId} showSignals=${showSignals} showSpikeTrains=${showSpikeTrains}`);
         setSegmentId(newSegmentId);
         setSignalId(newSignalId);
+        setShowSignals(showSignals);
+        setShowSpikeTrains(showSpikeTrains);
         if (newSegmentId === "all") {
             if (showSignals) {
                 datastore.current.getSignalsFromAllSegments(0, newSignalId, props.downSampleFactor)
@@ -95,6 +102,9 @@ export default function Visualizer(props) {
                             };
                         }));
                         setAxisLabels({x: results[0].times_dimensionality, y: results[0].values_units});
+                    })
+                    .catch(err => {
+                        setErrorMessage(`There was a problem loading signal #${newSignalId} from all segments (${err})`);
                     });
             }
                 // todo: handle get spike trains from all segments
@@ -110,6 +120,9 @@ export default function Visualizer(props) {
                             y: res.values
                         }]);
                         setAxisLabels({x: res.times_dimensionality, y: res.values_units});
+                    })
+                    .catch(err => {
+                        setErrorMessage(`There was a problem loading signal #${newSignalId} from segment #${newSegmentId} (${err})`);
                     });
             }
             if (showSpikeTrains) {
@@ -117,6 +130,9 @@ export default function Visualizer(props) {
                     .then(res => {
                         setSpikeData(transformSpikeData(res));
                         setSpikeTrainAxisLabels({x: "ms"})  // todo: use 'units' from data
+                    })
+                    .catch(err => {
+                        setErrorMessage(`There was a problem loading spiketrains from segment #${newSegmentId} (${err})`);
                     });
             }
         }
@@ -136,8 +152,19 @@ export default function Visualizer(props) {
                 showSpikeTrains={showSpikeTrains}
                 updateGraphData={updateGraphData}
             />
-            <GraphPanel data={signalData} axisLabels={axisLabels} show={showSignals} />
-            <SpikeTrainPanel data={spikeData} axisLabels={spikeTrainAxisLabels} show={showSpikeTrains} />
+            <ErrorPanel message={errorMessage} />
+            <GraphPanel
+                data={signalData}
+                axisLabels={axisLabels}
+                show={showSignals}
+                width={props.width}
+                height={props.height} />
+            <SpikeTrainPanel
+                data={spikeData}
+                axisLabels={spikeTrainAxisLabels}
+                show={showSpikeTrains}
+                width={props.width}
+                height={props.height} />
         </div>
     )
 

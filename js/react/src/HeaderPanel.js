@@ -1,18 +1,31 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import FormGroup from '@material-ui/core/FormGroup';
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@material-ui/core/Button';
+import TimelineIcon from '@material-ui/icons/Timeline';
+import ScatterPlotIcon from '@material-ui/icons/ScatterPlot';
+import Tooltip from '@material-ui/core/Tooltip';
+
+
 const useStyles = makeStyles((theme) => ({
+    controlBar: {
+        margin: theme.spacing(2),
+    },
     formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    controlButtons: {
+        margin: theme.spacing(1),
+        verticalAlign: "middle"
     }
-  }));
+}));
 
 
 function SegmentSelect(props) {
@@ -25,21 +38,21 @@ function SegmentSelect(props) {
 
     return (
         <FormControl className={classes.formControl}>
-                <InputLabel id="select-segment-label">Segment</InputLabel>
-                <Select
-                    labelId="select-segment-label"
-                    id="select-segment"
-                    value={props.segmentId}
-                    onChange={props.onChange}
-                >
-                    {menuItemAll}
-                    {
-                        props.labels.map((seg, index) => {
-                            return <MenuItem value={index}>{seg.label}</MenuItem>
-                        })
-                    }
-                </Select>
-            </FormControl>
+            <InputLabel id="select-segment-label">Segment</InputLabel>
+            <Select
+                labelId="select-segment-label"
+                id="select-segment"
+                value={props.segmentId}
+                onChange={props.onChange}
+            >
+                {menuItemAll}
+                {
+                    props.labels.map((seg, index) => {
+                        return <MenuItem value={index}>{seg.label}</MenuItem>
+                    })
+                }
+            </Select>
+        </FormControl>
     );
 }
 
@@ -49,27 +62,31 @@ function SignalSelect(props) {
     let segmentId = props.segmentId;
     if (props.segmentId === "all") {
         segmentId = 0;  // if plotting signals from all segments, the segments
-                        // have been checked for consistency, so we can take
-                        // the labels only from the first segment
+        // have been checked for consistency, so we can take
+        // the labels only from the first segment
     }
 
-    return (
-        <FormControl className={classes.formControl}>
-            <InputLabel id="select-signal-label">Signal</InputLabel>
-            <Select
-                labelId="select-signal-label"
-                id="select-signal"
-                value={props.signalId}
-                onChange={props.onChange}
-            >
-                {
-                    props.labels[segmentId].signalLabels.map((label, index) => {
-                        return <MenuItem value={index}>{label}</MenuItem>
-                    })
-                }
-            </Select>
-        </FormControl>
-    )
+    if (props.show) {
+        return (
+            <FormControl className={classes.formControl}>
+                <InputLabel id="select-signal-label">Signal</InputLabel>
+                <Select
+                    labelId="select-signal-label"
+                    id="select-signal"
+                    value={props.signalId}
+                    onChange={props.onChange}
+                >
+                    {
+                        props.labels[segmentId].signalLabels.map((label, index) => {
+                            return <MenuItem value={index}>{label}</MenuItem>
+                        })
+                    }
+                </Select>
+            </FormControl>
+        )
+    } else {
+        return ""
+    }
 }
 
 
@@ -78,6 +95,7 @@ export default function HeaderPanel(props) {
 
     React.useEffect(() => {
         console.log(props);
+
     }, []);
 
     const handleChangeSegment = (event) => {
@@ -93,10 +111,31 @@ export default function HeaderPanel(props) {
         props.updateGraphData(props.segmentId, event.target.value, props.showSignals, props.showSpikeTrains);
     };
 
+    const handleChangeVisibility = (dataType) => {
+        if (dataType === "signals") {
+            props.updateGraphData(props.segmentId, props.signalId, !props.showSignals, props.showSpikeTrains);
+        };
+        if (dataType === "spiketrains") {
+            console.log("DEBUG");
+            console.log(props.showSpikeTrains);
+            console.log(!props.showSpikeTrains);
+            props.updateGraphData(props.segmentId, props.signalId, props.showSignals, !props.showSpikeTrains);
+        };
+    };
+
     return (
-        <FormGroup row>
-            <SegmentSelect segmentId={props.segmentId} consistent={props.consistent} onChange={handleChangeSegment} labels={props.labels}/>
-            <SignalSelect segmentId={props.segmentId} signalId={props.signalId} onChange={handleChangeSignal} labels={props.labels}/>
-        </FormGroup>
+        <div className={classes.controlBar}>
+            <ButtonGroup color="primary" aria-label="outlined primary button group" className={classes.controlButtons}>
+            <Tooltip title={`${props.showSignals ? "Hide" : "Show"} signals`}>
+                <Button onClick={() => handleChangeVisibility('signals')} variant={`${props.showSignals ? "contained" : "outlined"}`}><TimelineIcon /></Button>
+                </Tooltip>
+                <Tooltip title={`${props.showSpikeTrains ? "Hide" : "Show"} spiketrains`}>
+                <Button onClick={() => handleChangeVisibility('spiketrains')} variant={`${props.showSpikeTrains ? "contained" : "outlined"}`}><ScatterPlotIcon /></Button>
+                </Tooltip>
+            </ButtonGroup>
+
+            <SegmentSelect segmentId={props.segmentId} consistent={props.consistent} onChange={handleChangeSegment} labels={props.labels} />
+            <SignalSelect segmentId={props.segmentId} signalId={props.signalId} onChange={handleChangeSignal} labels={props.labels} show={props.showSignals} />
+        </div>
     );
 }

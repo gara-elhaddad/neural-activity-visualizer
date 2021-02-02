@@ -16,9 +16,10 @@ class DataStore {
     }
 
     initialize() {
-        if (~this.initialized) {
+        if (!this.initialized) {
             const url = `${baseUrl}/blockdata/?url=${this.datafileUrl}`;
             const config = {}
+            console.log(`Initialising datastore for ${url}`);
             return axios.get(url, config)
                 .then(res => {
                     this.blocks = res.data.block;
