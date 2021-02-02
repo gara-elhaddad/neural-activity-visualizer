@@ -6,7 +6,7 @@ import SpikeTrainPanel from './SpikeTrainPanel';
 import ErrorPanel from './ErrorPanel';
 
 
-const baseUrl = "https://neo-viewer.brainsimulation.eu";
+const defaultBaseUrl = "https://neo-viewer.brainsimulation.eu";
 
 
 function generateTimes(n, tStart, samplingPeriod) {
@@ -44,7 +44,7 @@ export default function Visualizer(props) {
     const [spikeTrainAxisLabels, setSpikeTrainAxisLabels] = React.useState({x: ""});
     const [errorMessage, setErrorMessage] = React.useState("");
 
-    const datastore = React.useRef(new DataStore(props.source));
+    const datastore = React.useRef(new DataStore(props.source, props.baseUrl || defaultBaseUrl));
 
     React.useEffect(() => {
         if (props.segmentId) {

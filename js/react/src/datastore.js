@@ -1,15 +1,13 @@
 import axios from 'axios';
 
-const baseUrl = "https://neo-viewer.brainsimulation.eu";
-
-
 function range(n) {
     return [...Array(n).keys()];
 }
 
 
 class DataStore {
-    constructor(datafileUrl) {
+    constructor(datafileUrl, baseUrl) {
+        this.baseUrl = baseUrl;
         this.datafileUrl = datafileUrl;
         this.blocks = [];
         this.initialized = false;
@@ -17,7 +15,7 @@ class DataStore {
 
     initialize() {
         if (!this.initialized) {
-            const url = `${baseUrl}/blockdata/?url=${this.datafileUrl}`;
+            const url = `${this.baseUrl}/blockdata/?url=${this.datafileUrl}`;
             const config = {}
             console.log(`Initialising datastore for ${url}`);
             return axios.get(url, config)
@@ -70,7 +68,7 @@ class DataStore {
     }
 
     loadSegment(blockId, segmentId) {
-        const url = `${baseUrl}/segmentdata/?url=${this.datafileUrl}&segment_id=${segmentId}`;
+        const url = `${this.baseUrl}/segmentdata/?url=${this.datafileUrl}&segment_id=${segmentId}`;
         const config = {};
         console.log(`Trying to load segment #${segmentId}`);
         return axios.get(url, config)
@@ -78,7 +76,7 @@ class DataStore {
     }
 
     loadSignal(blockId, segmentId, signalId, downSampleFactor) {
-        const url = `${baseUrl}/analogsignaldata/?url=${this.datafileUrl}&segment_id=${segmentId}&analog_signal_id=${signalId}&down_sample_factor=${downSampleFactor || 1}`;
+        const url = `${this.baseUrl}/analogsignaldata/?url=${this.datafileUrl}&segment_id=${segmentId}&analog_signal_id=${signalId}&down_sample_factor=${downSampleFactor || 1}`;
         const config = {};
         console.log(`Trying to load signal #${signalId} in segment #${segmentId}`);
         return axios.get(url, config)
@@ -86,7 +84,7 @@ class DataStore {
     }
 
     loadSpikeTrains(blockId, segmentId) {
-        const url = `${baseUrl}/spiketraindata/?url=${this.datafileUrl}&segment_id=${segmentId}`;
+        const url = `${this.baseUrl}/spiketraindata/?url=${this.datafileUrl}&segment_id=${segmentId}`;
         const config = {};
         console.log(`Trying to load spiketrains for #${segmentId}`);
         return axios.get(url, config)
