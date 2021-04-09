@@ -13,16 +13,16 @@ npm install --save neural-activity-visualizer-react
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import React from 'react';
+import Visualizer from 'neural-activity-visualizer-react';
 
-import MyComponent from 'neural-activity-visualizer-react'
-import 'neural-activity-visualizer-react/dist/index.css'
+function Example {
+  const source = "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf";
 
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
-}
+  return (
+    <Visualizer source={source} showSpikeTrains={false} showSignals={true}/>
+  )
+
 ```
 
 ## License
