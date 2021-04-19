@@ -30,6 +30,34 @@ function transformSpikeData(inputData) {
 }
 
 
+function isMultiChannel(signal) {
+    if (signal.values.length > 0) {
+        return (signal.values[0].constructor === Array);
+    } else {
+        return false;
+    }
+}
+
+function formatSignalData(signal) {
+    let formattedData = [];
+    if (isMultiChannel(signal)) {
+        for (let i = 0; i < signal.values.length; i++) {
+            formattedData.push({
+                x: generateTimes(signal.values[i].length, 0.0, signal.sampling_period),
+                y: signal.values[i]
+            })
+        }
+    } else {
+        formattedData.push({
+            x: generateTimes(signal.values.length, 0.0, signal.sampling_period),
+            y: signal.values
+        })
+    }
+    console.log(formattedData);
+    return formattedData;
+};
+
+
 export default function Visualizer(props) {
     const [segmentId, setSegmentId] = React.useState(0);
     const [signalId, setSignalId] = React.useState(0);
@@ -97,12 +125,11 @@ export default function Visualizer(props) {
                 datastore.current.getSignalsFromAllSegments(0, newSignalId, props.downSampleFactor)
                     .then(results => {
                         setLabels(datastore.current.getLabels(0));
-                        setSignalData(results.map(res => {
-                            return {
-                                x: generateTimes(res.values.length, 0.0, res.sampling_period),
-                                y: res.values
-                            };
-                        }));
+                        let formattedData = [];
+                        for (const res of results) {
+                            formattedData = [...formattedData, ...formatSignalData(res)];
+                        }
+                        setSignalData(formattedData);
                         setAxisLabels({x: results[0].times_dimensionality, y: results[0].values_units});
                         setLoading(false);
                     })
@@ -118,10 +145,7 @@ export default function Visualizer(props) {
                         console.log(res);
                         console.log(datastore.current);
                         setLabels(datastore.current.getLabels(0));
-                        setSignalData([{
-                            x: generateTimes(res.values.length, res.t_start, res.sampling_period),
-                            y: res.values
-                        }]);
+                        setSignalData(formatSignalData(res));
                         setAxisLabels({x: res.times_dimensionality, y: res.values_units});
                         setLoading(false);
                     })
