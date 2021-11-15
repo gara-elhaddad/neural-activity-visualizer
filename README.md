@@ -57,7 +57,7 @@ Instructions for doing this are [here](https://github.com/NeuralEnsemble/neo-vie
 
 ## Reference: the file server REST API
 
-See [here](https://github.com/NeuralEnsemble/neo-viewer/blob/master/api/README.mdhttps://github.com/NeuralEnsemble/neo-viewer/blob/master/api/README.md#api-documentation).
+See [here](https://neo-viewer.brainsimulation.eu/#api_docs).
 
 
 <div><img src="https://raw.githubusercontent.com/HumanBrainProject/hbp-validation-client/master/eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
