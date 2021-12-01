@@ -54,10 +54,10 @@ export default function InfoPanel(props) {
                     <ListItemNonEmpty label="Name" value={props.info.name} />
                     <ListItemNonEmpty label="Description" value={props.info.description} />
                     <ListItemNonEmpty label="Recording date" value={props.info.rec_datetime} />
-                    <ListItemNonEmpty label="Filename" value={props.info.file_name} />
+                    <ListItemNonEmpty label="Source" value={props.source} />
                     {
                         Object.entries(props.info.annotations || {}).map(([label, value]) => {
-                            return <ListItemNonEmpty label={label} value={value} />
+                            return <ListItemNonEmpty key={value} label={label} value={value} />
                         })
                     }
                 </List>

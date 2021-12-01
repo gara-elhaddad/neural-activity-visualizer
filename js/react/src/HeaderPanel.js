@@ -64,7 +64,7 @@ function SegmentSelect(props) {
                 {menuItemAll}
                 {
                     props.labels.map((seg, index) => {
-                        return <MenuItem value={index}>{seg.label}</MenuItem>
+                        return <MenuItem key={index} value={index}>{seg.label}</MenuItem>
                     })
                 }
             </Select>
@@ -94,7 +94,7 @@ function SignalSelect(props) {
                 >
                     {
                         props.labels[segmentId].signalLabels.map((label, index) => {
-                            return <MenuItem value={index}>{label}</MenuItem>
+                            return <MenuItem key={index} value={index}>{label}</MenuItem>
                         })
                     }
                 </Select>
@@ -184,6 +184,7 @@ export default function HeaderPanel(props) {
             </Tooltip>
             <InfoPanel
                 id={id}
+                source={props.source}
                 info={props.metadata}
                 open={infoOpen}
                 anchor={popoverAnchor}

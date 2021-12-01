@@ -16,6 +16,13 @@ export default function GraphPanel(props) {
             <Plot
                 data={data}
                 layout={{
+                    margin: {
+                        l: 50,
+                        r: 50,
+                        b: 50,
+                        t: 50,
+                        pad: 4
+                    },
                     width: props.width || 1200,
                     height: props.height || 400,
                     xaxis: {
