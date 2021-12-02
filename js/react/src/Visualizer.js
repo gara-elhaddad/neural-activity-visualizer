@@ -81,7 +81,8 @@ export default function Visualizer(props) {
     const datastore = React.useRef(
         new DataStore(props.source, props.baseUrl || defaultBaseUrl)
     );
-
+    console.log("121212112");
+    console.log(props);
     React.useEffect(() => {
         if (props.segmentId) {
             setSegmentId(props.segmentId);
@@ -96,6 +97,7 @@ export default function Visualizer(props) {
             setShowSpikeTrains(true);
         }
         if (props.disableChoice) {
+            console.log("444444444444");
             setDisableChoice(true);
         }
         if (props.downSampleFactor) {

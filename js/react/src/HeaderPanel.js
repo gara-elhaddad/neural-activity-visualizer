@@ -187,7 +187,8 @@ export default function HeaderPanel(props) {
 
     const infoOpen = Boolean(popoverAnchor);
     const id = infoOpen ? "info-panel" : undefined;
-
+    console.log(props.disableChoice);
+    console.log("1=");
     return (
         <div className={classes.controlBar}>
             {!props.disableChoice && (

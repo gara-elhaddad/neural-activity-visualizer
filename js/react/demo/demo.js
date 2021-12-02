@@ -2,14 +2,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Box from "@mui/material/Box";
-import Tooltip from "@mui/material/Tooltip";
 import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
+import Checkbox from "@mui/material/Checkbox";
 import Visualizer from "../src";
 import SyntaxHighLighter from "react-syntax-highlighter";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { docco } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import "./demo.css";
+import { CheckBox } from "@material-ui/icons";
 
 const source1 =
     "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf";
@@ -17,6 +16,32 @@ const source2 =
     "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix";
 
 function App() {
+    const [state, setState] = React.useState({
+        source: source1,
+        width: "",
+        height: "",
+        downSampleFactor: 1,
+        ioType: "",
+        showSignals: true,
+        showSpikeTrains: false,
+        disableChoice: false,
+    });
+
+    function handleChange(evt) {
+        console.log(evt);
+        const value = evt.target.value;
+        console.log(evt.target.name);
+        console.log(value);
+        setState({
+            ...state,
+            [evt.target.name]:
+                evt.target.type === "checkbox"
+                    ? !state[evt.target.name]
+                    : value,
+        });
+    }
+
+    console.log(state);
     return (
         <div className="container">
             <br />
@@ -49,8 +74,7 @@ function App() {
                 </div>
             </div>
             <br />
-            <br />
-            <div className="text">
+            <div className="text" style={{ margin: "25px" }}>
                 The neural-activity-visualizer Javascript app, enables
                 web-browser visualisation of electrophysiology datafiles in any
                 format supported by the Neo library. It makes use of the{" "}
@@ -63,7 +87,7 @@ function App() {
                 .
             </div>
             <br />
-            <br />
+            <hr />
             <h2 className="text" style={{ marginLeft: 0 }}>
                 Example: Basic usage
             </h2>
@@ -99,6 +123,8 @@ function App() {
             </div>
             <br />
             <br />
+            <hr />
+
             <h2 className="text" style={{ marginLeft: 0 }}>
                 Example: Interactive Demo
             </h2>
@@ -109,134 +135,296 @@ function App() {
                 Attributes:
             </div>
             <br />
-            <Box
-                sx={{
-                    "& .MuiTextField-root": { m: 1 },
-                }}
-            >
+            <div style={{ marginBottom: "20px" }}>
                 <TextField
-                    name="source_url"
-                    label="File Source URL"
+                    name="source"
+                    label="source"
+                    value={state.source}
+                    onChange={handleChange}
                     // defaultValue={this.state.name}
                     // onBlur={this.handleFieldChange}
                     variant="outlined"
                     fullWidth
-                    InputProps={{
-                        startAdornment: (
-                            <Tooltip title="Specify the URL of the file to be visualized">
-                                <InputAdornment position="start">
-                                    <HelpOutlineIcon />
-                                </InputAdornment>
-                            </Tooltip>
-                        ),
-                    }}
                     InputLabelProps={{
                         style: {
-                            fontSize: 16,
-                            fontWeight: "bold",
+                            fontSize: 18,
+                            // fontWeight: "bold",
                             color: "#000000",
+                            fontFamily: "monospace",
                         },
                     }}
+                    helperText="URL of source data file"
                 />
-            </Box>
-            <Box
-                component="form"
-                sx={{
-                    "& .MuiTextField-root": { m: 1, width: "25ch" },
+            </div>
+            <table
+                className="text"
+                border="1"
+                cellPadding="10"
+                style={{
+                    borderCollapse: "collapse",
+                    textAlign: "center",
+                    width: "100%",
                 }}
-                noValidate
-                autoComplete="off"
             >
-                <div>
-                    <TextField
-                        name="width"
-                        label="Width"
-                        type="number"
-                        // defaultValue={this.state.name}
-                        // onBlur={this.handleFieldChange}
-                        variant="outlined"
-                        InputProps={{
-                            startAdornment: (
-                                <Tooltip title="Set width of visualization panel; inherits from parent as default">
-                                    <InputAdornment position="start">
-                                        <HelpOutlineIcon />
-                                    </InputAdornment>
-                                </Tooltip>
-                            ),
-                            inputProps: {
-                                min: 0,
-                                max: 9999,
-                                maxLength: 4,
-                            },
-                        }}
-                        InputLabelProps={{
-                            style: {
-                                fontSize: 16,
-                                fontWeight: "bold",
-                                color: "#000000",
-                            },
-                        }}
-                    />
-                    <TextField
-                        name="height"
-                        label="Height"
-                        type="number"
-                        // defaultValue={this.state.name}
-                        // onBlur={this.handleFieldChange}
-                        variant="outlined"
-                        InputProps={{
-                            startAdornment: (
-                                <Tooltip title="Set height of visualization panel; inherits from parent (max 450px) as default">
-                                    <InputAdornment position="start">
-                                        <HelpOutlineIcon />
-                                    </InputAdornment>
-                                </Tooltip>
-                            ),
-                            inputProps: {
-                                min: 0,
-                                max: 9999,
-                                maxLength: 4,
-                            },
-                        }}
-                        InputLabelProps={{
-                            style: {
-                                fontSize: 16,
-                                fontWeight: "bold",
-                                color: "#000000",
-                            },
-                        }}
-                    />
-                    <TextField
-                        name="downsample_Factor"
-                        label="Downsampling Factor"
-                        type="number"
-                        // defaultValue={this.state.name}
-                        // onBlur={this.handleFieldChange}
-                        variant="outlined"
-                        InputProps={{
-                            startAdornment: (
-                                <Tooltip title="Set the downsampling factor for loading data">
-                                    <InputAdornment position="start">
-                                        <HelpOutlineIcon />
-                                    </InputAdornment>
-                                </Tooltip>
-                            ),
-                            inputProps: {
-                                min: 0,
-                                max: 99,
-                                maxLength: 2,
-                            },
-                        }}
-                        InputLabelProps={{
-                            style: {
-                                fontSize: 16,
-                                fontWeight: "bold",
-                                color: "#000000",
-                            },
-                        }}
-                    />
-                </div>
-            </Box>
+                <thead>
+                    <tr>
+                        <th style={{ width: "200px" }}>Attribute</th>
+                        <th style={{ width: "150px" }}>Value</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            width
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <TextField
+                                    name="width"
+                                    label=""
+                                    value={state.width}
+                                    onChange={handleChange}
+                                    type="number"
+                                    // defaultValue={this.state.name}
+                                    // onBlur={this.handleFieldChange}
+                                    variant="outlined"
+                                    InputProps={{
+                                        inputProps: {
+                                            min: 0,
+                                            max: 9999,
+                                            maxLength: 4,
+                                            style: { textAlign: "center" },
+                                        },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td className="text">
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Set width of visualization panel (in absolute
+                                values; not in %). Inherits from parent as
+                                default and is responsive.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            height
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <TextField
+                                    name="height"
+                                    label=""
+                                    value={state.height}
+                                    onChange={handleChange}
+                                    type="number"
+                                    // defaultValue={this.state.name}
+                                    // onBlur={this.handleFieldChange}
+                                    variant="outlined"
+                                    InputProps={{
+                                        inputProps: {
+                                            min: 0,
+                                            max: 9999,
+                                            maxLength: 4,
+                                            style: { textAlign: "center" },
+                                        },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td className="text">
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Set height of visualization panel (in absolute
+                                values; not in %). Inherits from parent as
+                                default (upto 450 px) and is responsive.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            downSampleFactor
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <TextField
+                                    name="downSampleFactor"
+                                    label=""
+                                    value={state.downSampleFactor}
+                                    onChange={handleChange}
+                                    type="number"
+                                    // defaultValue={this.state.name}
+                                    // onBlur={this.handleFieldChange}
+                                    variant="outlined"
+                                    InputProps={{
+                                        inputProps: {
+                                            min: 0,
+                                            max: 9999,
+                                            maxLength: 4,
+                                            style: { textAlign: "center" },
+                                        },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td>
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Factor by which data should be downsampled prior
+                                to loading. Useful for faster loading of large
+                                files. Accepts positive integer values. Default
+                                value = 1 (no downsampling).
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            ioType
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <TextField
+                                    name="ioType"
+                                    label=""
+                                    value={state.ioType}
+                                    onChange={handleChange}
+                                    // defaultValue={this.state.name}
+                                    // onBlur={this.handleFieldChange}
+                                    variant="outlined"
+                                    InputProps={{
+                                        inputProps: {
+                                            style: { textAlign: "center" },
+                                        },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td>
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Can be used to manually specify the file type.
+                                Particularly useful for generic file extensions
+                                (e.g. .dat) to help identify data format. No
+                                default value.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            showSignals
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <Checkbox
+                                    name="showSignals"
+                                    checked={state.showSignals}
+                                    onChange={handleChange}
+                                    sx={{
+                                        "& .MuiSvgIcon-root": { fontSize: 28 },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td>
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Option to enable/disable display of signals
+                                panel on page loading. Default is true (i.e.
+                                will display the signal panel).
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            showSpikeTrains
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <Checkbox
+                                    name="showSpikeTrains"
+                                    checked={state.showSpikeTrains}
+                                    onChange={handleChange}
+                                    sx={{
+                                        "& .MuiSvgIcon-root": { fontSize: 28 },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td>
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Option to enable/disable display of spiketrain
+                                panel on page loading. Default is false (i.e.
+                                will not display the spiketrain panel).
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            disableChoice
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <Checkbox
+                                    name="disableChoice"
+                                    checked={state.disableChoice}
+                                    onChange={handleChange}
+                                    sx={{
+                                        "& .MuiSvgIcon-root": { fontSize: 28 },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td>
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Option to enable/disable display of buttons to
+                                hide/unhide siganl and spiketrain panel. Default
+                                is false (i.e. will give users access to these
+                                buttons).
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             <div
                 className="text"
                 style={{ marginLeft: 10, marginTop: 25, fontWeight: "bold" }}
@@ -266,12 +454,14 @@ function App() {
             </div>
             <div>
                 <Visualizer
-                    source={source1}
-                    showSpikeTrains={false}
-                    showSignals={true}
-                    disableChoice={true}
-                    // width={900}
-                    // height={350}
+                    source={state.source}
+                    width={state.width}
+                    height={state.height}
+                    downSampleFactor={state.downSampleFactor}
+                    ioType={state.ioType}
+                    showSpikeTrains={state.showSpikeTrains}
+                    showSignals={state.showSignals}
+                    disableChoice={state.disableChoice}
                 />
             </div>
             <br />
@@ -286,13 +476,13 @@ function App() {
                 <div></div>
                 <div></div>
             </div>
-            <p className="text" style={{ marginTop: 20 }}>
+            <p className="text" style={{ margin: 10, marginTop: 25 }}>
                 This project has received funding from the European Union’s
                 Horizon 2020 Framework Programme for Research and Innovation
                 under the Specific Grant Agreements No. 785907 and No. 945539
                 (Human Brain Project SGA2 and SGA3).
             </p>
-            <p className="text" style={{ marginTop: 20, marginBottom: 40 }}>
+            <p className="text" style={{ margin: 10, marginBottom: 40 }}>
                 If you encounter any problems,{" "}
                 <a
                     href="https://github.com/NeuralEnsemble/neo-viewer/issues/new"
