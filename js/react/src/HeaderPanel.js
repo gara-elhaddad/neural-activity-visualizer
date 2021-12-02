@@ -197,6 +197,12 @@ export default function HeaderPanel(props) {
             </Tooltip>
 
             <LoadingAnimation loading={props.loading} />
+            {
+                !props.showSignals && !props.showSpikeTrains &&
+                (
+                    <span>Click signals (<TimelineIcon fontSize="small" style={{"verticalAlign":"sub"}} />) and/or spike trains (<ScatterPlotIcon fontSize="small" style={{"verticalAlign":"sub"}} />)</span>
+                )
+            }
         </div>
     );
 }

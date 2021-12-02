@@ -120,7 +120,11 @@ export default function Visualizer(props) {
         setSignalId(newSignalId);
         setShowSignals(showSignals);
         setShowSpikeTrains(showSpikeTrains);
-        if (newSegmentId === "all") {
+        if (!showSignals && !showSpikeTrains) {
+            // nothing to show
+            setLoading(false);
+        }
+        else if (newSegmentId === "all") {
             if (showSignals) {
                 datastore.current.getSignalsFromAllSegments(0, newSignalId, props.downSampleFactor)
                     .then(results => {
