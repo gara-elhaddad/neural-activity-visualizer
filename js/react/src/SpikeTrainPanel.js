@@ -16,8 +16,13 @@ export default function SpikeTrainPanel(props) {
             <Plot
                 data={data}
                 layout={{
-                    width: props.width || 1200,
-                    height: props.height || 400,
+                    margin: {
+                        l: 50,
+                        r: 50,
+                        b: 50,
+                        t: 50,
+                        pad: 4,
+                      },
                     xaxis: {
                         title: {
                             text: `Time (${props.axisLabels.x})`
@@ -28,6 +33,11 @@ export default function SpikeTrainPanel(props) {
                             text: "Spike Trains"
                         }
                     },
+                }}
+                useResizeHandler={!Boolean(props.width && props.height)}
+                style={{
+                    width: props.width || "100%",
+                    height: props.height || "100%",
                 }}
             />
         );

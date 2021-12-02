@@ -1,13 +1,11 @@
-import React from 'react';
-import DataStore from './datastore';
-import HeaderPanel from './HeaderPanel';
-import GraphPanel from './GraphPanel';
-import SpikeTrainPanel from './SpikeTrainPanel';
-import ErrorPanel from './ErrorPanel';
-
+import React from "react";
+import DataStore from "./datastore";
+import HeaderPanel from "./HeaderPanel";
+import GraphPanel from "./GraphPanel";
+import SpikeTrainPanel from "./SpikeTrainPanel";
+import ErrorPanel from "./ErrorPanel";
 
 const defaultBaseUrl = "https://neo-viewer.brainsimulation.eu";
-
 
 function generateTimes(n, tStart, samplingPeriod) {
     const times = Array(n);
@@ -23,16 +21,15 @@ function transformSpikeData(inputData) {
         //console.log(key);
         //console.log(value);
         return {
-            x: value.times,  // todo: scale by units?
-            y: Array(value.times.length).fill(key)
-        }
+            x: value.times, // todo: scale by units?
+            y: Array(value.times.length).fill(key),
+        };
     });
 }
 
-
 function isMultiChannel(signal) {
     if (signal.values.length > 0) {
-        return (signal.values[0].constructor === Array);
+        return signal.values[0].constructor === Array;
     } else {
         return false;
     }
@@ -43,20 +40,23 @@ function formatSignalData(signal) {
     if (isMultiChannel(signal)) {
         for (let i = 0; i < signal.values.length; i++) {
             formattedData.push({
-                x: generateTimes(signal.values[i].length, 0.0, signal.sampling_period),
-                y: signal.values[i]
-            })
+                x: generateTimes(
+                    signal.values[i].length,
+                    0.0,
+                    signal.sampling_period
+                ),
+                y: signal.values[i],
+            });
         }
     } else {
         formattedData.push({
             x: generateTimes(signal.values.length, 0.0, signal.sampling_period),
-            y: signal.values
-        })
+            y: signal.values,
+        });
     }
     console.log(formattedData);
     return formattedData;
-};
-
+}
 
 export default function Visualizer(props) {
     const [segmentId, setSegmentId] = React.useState(0);
@@ -64,16 +64,23 @@ export default function Visualizer(props) {
     const [consistent, setConsistent] = React.useState(false);
     const [showSignals, setShowSignals] = React.useState(false);
     const [showSpikeTrains, setShowSpikeTrains] = React.useState(false);
+    const [disableChoice, setDisableChoice] = React.useState(false);
     const [downSampleFactor, setDownSampleFactor] = React.useState(1);
-    const [labels, setLabels] = React.useState([{label: "Segment #0", signalLabels: ["Signal #0"]}]);
+    const [labels, setLabels] = React.useState([
+        { label: "Segment #0", signalLabels: ["Signal #0"] },
+    ]);
     const [signalData, setSignalData] = React.useState([]);
     const [spikeData, setSpikeData] = React.useState([]);
-    const [axisLabels, setAxisLabels] = React.useState({x: "", y: ""});
-    const [spikeTrainAxisLabels, setSpikeTrainAxisLabels] = React.useState({x: ""});
+    const [axisLabels, setAxisLabels] = React.useState({ x: "", y: "" });
+    const [spikeTrainAxisLabels, setSpikeTrainAxisLabels] = React.useState({
+        x: "",
+    });
     const [errorMessage, setErrorMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
 
-    const datastore = React.useRef(new DataStore(props.source, props.baseUrl || defaultBaseUrl));
+    const datastore = React.useRef(
+        new DataStore(props.source, props.baseUrl || defaultBaseUrl)
+    );
 
     React.useEffect(() => {
         if (props.segmentId) {
@@ -88,6 +95,9 @@ export default function Visualizer(props) {
         if (props.showSpikeTrains) {
             setShowSpikeTrains(true);
         }
+        if (props.disableChoice) {
+            setDisableChoice(true);
+        }
         if (props.downSampleFactor) {
             setDownSampleFactor(props.downSampleFactor);
         }
@@ -95,77 +105,122 @@ export default function Visualizer(props) {
         // so we can't assume segmentId and signalId have been set by now
         const currentSegmentId = props.segmentId || segmentId;
         const currentSignalId = props.signalId || signalId;
-        const currentShowSignals = (props.showSignals !== false);
+        const currentShowSignals = props.showSignals !== false;
         const currentShowSpikeTrains = props.showSpikeTrains || false;
 
-        datastore.current.initialize()
-            .catch(err => {
+        datastore.current
+            .initialize()
+            .catch((err) => {
                 console.log(`Error initializing datastore: ${err}`);
                 setErrorMessage(`Unable to read data file (${err})`);
             })
-            .then(res => {
+            .then((res) => {
                 setConsistent(datastore.current.isConsistentAcrossSegments(0));
-                updateGraphData(currentSegmentId, currentSignalId, currentShowSignals, currentShowSpikeTrains);
+                updateGraphData(
+                    currentSegmentId,
+                    currentSignalId,
+                    currentShowSignals,
+                    currentShowSpikeTrains
+                );
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(`Error after initializing datastore: ${err}`);
-                setErrorMessage(`There was a problem reading data from the data file (${err})`);
+                setErrorMessage(
+                    `There was a problem reading data from the data file (${err})`
+                );
             });
     }, []);
 
-    function updateGraphData(newSegmentId, newSignalId, showSignals, showSpikeTrains) {
-        console.log(`segmentId=${newSegmentId} signalId=${newSignalId} showSignals=${showSignals} showSpikeTrains=${showSpikeTrains}`);
+    function updateGraphData(
+        newSegmentId,
+        newSignalId,
+        showSignals,
+        showSpikeTrains
+    ) {
+        console.log(
+            `segmentId=${newSegmentId} signalId=${newSignalId} showSignals=${showSignals} showSpikeTrains=${showSpikeTrains}`
+        );
         setLoading(true);
         setSegmentId(newSegmentId);
         setSignalId(newSignalId);
         setShowSignals(showSignals);
         setShowSpikeTrains(showSpikeTrains);
-        if (!showSignals && !showSpikeTrains) {
+        setErrorMessage("")
+        if ((!showSignals && !showSpikeTrains) || errorMessage) {
             // nothing to show
             setLoading(false);
-        }
-        else if (newSegmentId === "all") {
+        } else if (newSegmentId === "all") {
             if (showSignals) {
-                datastore.current.getSignalsFromAllSegments(0, newSignalId, props.downSampleFactor)
-                    .then(results => {
+                datastore.current
+                    .getSignalsFromAllSegments(
+                        0,
+                        newSignalId,
+                        props.downSampleFactor
+                    )
+                    .then((results) => {
                         setLabels(datastore.current.getLabels(0));
                         let formattedData = [];
                         for (const res of results) {
-                            formattedData = [...formattedData, ...formatSignalData(res)];
+                            formattedData = [
+                                ...formattedData,
+                                ...formatSignalData(res),
+                            ];
                         }
                         setSignalData(formattedData);
-                        setAxisLabels({x: results[0].times_dimensionality, y: results[0].values_units});
+                        setAxisLabels({
+                            x: results[0].times_dimensionality,
+                            y: results[0].values_units,
+                        });
                         setLoading(false);
                     })
-                    .catch(err => {
-                        setErrorMessage(`There was a problem loading signal #${newSignalId} from all segments (${err})`);
+                    .catch((err) => {
+                        setErrorMessage(
+                            `There was a problem loading signal #${newSignalId} from all segments (${err})`
+                        );
+                        setLoading(false);
                     });
             }
-                // todo: handle get spike trains from all segments
+            // todo: handle get spike trains from all segments
         } else {
             if (showSignals) {
-                datastore.current.getSignal(0, newSegmentId, newSignalId, props.downSampleFactor)
-                    .then(res => {
+                datastore.current
+                    .getSignal(
+                        0,
+                        newSegmentId,
+                        newSignalId,
+                        props.downSampleFactor
+                    )
+                    .then((res) => {
                         console.log(res);
                         console.log(datastore.current);
                         setLabels(datastore.current.getLabels(0));
                         setSignalData(formatSignalData(res));
-                        setAxisLabels({x: res.times_dimensionality, y: res.values_units});
+                        setAxisLabels({
+                            x: res.times_dimensionality,
+                            y: res.values_units,
+                        });
                         setLoading(false);
                     })
-                    .catch(err => {
-                        setErrorMessage(`There was a problem loading signal #${newSignalId} from segment #${newSegmentId} (${err})`);
+                    .catch((err) => {
+                        setErrorMessage(
+                            `There was a problem loading signal #${newSignalId} from segment #${newSegmentId} (${err})`
+                        );
+                        setLoading(false);
                     });
             }
             if (showSpikeTrains) {
-                datastore.current.getSpikeTrains(0, newSegmentId)
-                    .then(res => {
+                datastore.current
+                    .getSpikeTrains(0, newSegmentId)
+                    .then((res) => {
                         setSpikeData(transformSpikeData(res));
-                        setSpikeTrainAxisLabels({x: "ms"})  // todo: use 'units' from data
+                        setSpikeTrainAxisLabels({ x: "ms" }); // todo: use 'units' from data
                         setLoading(false);
                     })
-                    .catch(err => {
-                        setErrorMessage(`There was a problem loading spiketrains from segment #${newSegmentId} (${err})`);
+                    .catch((err) => {
+                        setErrorMessage(
+                            `There was a problem loading spiketrains from segment #${newSegmentId} (${err})`
+                        );
+                        setLoading(false);
                     });
             }
         }
@@ -183,6 +238,7 @@ export default function Visualizer(props) {
                 labels={labels}
                 showSignals={showSignals}
                 showSpikeTrains={showSpikeTrains}
+                disableChoice={disableChoice}
                 updateGraphData={updateGraphData}
                 metadata={datastore.current.metadata(0)}
                 loading={loading}
@@ -193,14 +249,15 @@ export default function Visualizer(props) {
                 axisLabels={axisLabels}
                 show={showSignals}
                 width={props.width}
-                height={props.height} />
+                height={props.height}
+            />
             <SpikeTrainPanel
                 data={spikeData}
                 axisLabels={spikeTrainAxisLabels}
                 show={showSpikeTrains}
                 width={props.width}
-                height={props.height} />
+                height={props.height}
+            />
         </div>
-    )
-
+    );
 }
