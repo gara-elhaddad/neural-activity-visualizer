@@ -11,7 +11,6 @@ export default function GraphPanel(props) {
         const data = props.data.map((trace) => {
             return { ...lineProperties, ...trace };
         });
-        console.log(data);
         return (
             <Plot
                 data={data}
@@ -36,8 +35,8 @@ export default function GraphPanel(props) {
                 }}
                 useResizeHandler={!Boolean(props.width && props.height)}
                 style={{
-                    width: props.width || "100%",
-                    height: props.height || "100%",
+                    width: parseInt(props.width) || "100%",
+                    height: parseInt(props.height) || "100%",
                 }}
             />
         );

@@ -25,13 +25,12 @@ function App() {
         showSignals: true,
         showSpikeTrains: false,
         disableChoice: false,
+        segmentId: 0,
+        signalId: 0
     });
 
     function handleChange(evt) {
-        console.log(evt);
         const value = evt.target.value;
-        console.log(evt.target.name);
-        console.log(value);
         setState({
             ...state,
             [evt.target.name]:
@@ -40,7 +39,7 @@ function App() {
                     : value,
         });
     }
-
+    console.log("State");
     console.log(state);
     return (
         <div className="container">
@@ -119,7 +118,7 @@ function App() {
                 Output:
             </div>
             <div>
-                <Visualizer source={source1} />
+                {/* <Visualizer source={source1} /> */}
             </div>
             <br />
             <br />
@@ -423,6 +422,82 @@ function App() {
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            segmentId
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <TextField
+                                    name="segmentId"
+                                    label=""
+                                    value={state.segmentId}
+                                    onChange={handleChange}
+                                    type="number"
+                                    // defaultValue={this.state.name}
+                                    // onBlur={this.handleFieldChange}
+                                    variant="outlined"
+                                    InputProps={{
+                                        inputProps: {
+                                            min: 0,
+                                            max: 9999,
+                                            maxLength: 4,
+                                            style: { textAlign: "center" },
+                                        },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td>
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Data segment to be displayed on page loading. Default value = 0, i.e. loads segment #0.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={{ fontFamily: "monospace", fontSize: 18 }}>
+                            signalId
+                        </td>
+                        <td>
+                            <div style={{ width: "20ch" }}>
+                                <TextField
+                                    name="signalId"
+                                    label=""
+                                    value={state.signalId}
+                                    onChange={handleChange}
+                                    type="number"
+                                    // defaultValue={this.state.name}
+                                    // onBlur={this.handleFieldChange}
+                                    variant="outlined"
+                                    InputProps={{
+                                        inputProps: {
+                                            min: 0,
+                                            max: 9999,
+                                            maxLength: 4,
+                                            style: { textAlign: "center" },
+                                        },
+                                    }}
+                                />
+                            </div>
+                        </td>
+                        <td>
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                }}
+                            >
+                                Signal to be displayed on page loading. Default value = 0, i.e. loads signal #0.
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div
@@ -454,6 +529,7 @@ function App() {
             </div>
             <div>
                 <Visualizer
+                    key={JSON.stringify(state)}
                     source={state.source}
                     width={state.width}
                     height={state.height}
@@ -462,6 +538,8 @@ function App() {
                     showSpikeTrains={state.showSpikeTrains}
                     showSignals={state.showSignals}
                     disableChoice={state.disableChoice}
+                    segmentId={state.segmentId}
+                    signalId={state.signalId}
                 />
             </div>
             <br />

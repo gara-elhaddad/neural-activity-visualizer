@@ -11,7 +11,6 @@ export default function SpikeTrainPanel(props) {
         const data = props.data.map(spikes => {
             return { ...lineProperties, ...spikes }
         });
-        console.log(data);
         return (
             <Plot
                 data={data}

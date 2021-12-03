@@ -49,14 +49,13 @@ function SegmentSelect(props) {
     if (props.consistent) {
         menuItemAll = <MenuItem value={"all"}>All</MenuItem>;
     }
-
     return (
         <FormControl className={classes.formControl}>
             <InputLabel id="select-segment-label">Segment</InputLabel>
             <Select
                 labelId="select-segment-label"
                 id="select-segment"
-                value={props.segmentId}
+                value={props.labels[props.segmentId] ? props.segmentId : 0}
                 onChange={props.onChange}
             >
                 {menuItemAll}
@@ -81,8 +80,7 @@ function SignalSelect(props) {
         // have been checked for consistency, so we can take
         // the labels only from the first segment
     }
-
-    if (props.show) {
+    if (props.show && props.labels[segmentId]) {
         return (
             <FormControl className={classes.formControl}>
                 <InputLabel id="select-signal-label">Signal</InputLabel>
@@ -133,11 +131,6 @@ export default function HeaderPanel(props) {
     }, []);
 
     const handleChangeSegment = (event) => {
-        console.log("change segment");
-        console.log(event);
-        console.log(event.target.value);
-        console.log(typeof event.target.value);
-
         props.updateGraphData(
             event.target.value,
             props.signalId,
@@ -165,9 +158,6 @@ export default function HeaderPanel(props) {
             );
         }
         if (dataType === "spiketrains") {
-            console.log("DEBUG");
-            console.log(props.showSpikeTrains);
-            console.log(!props.showSpikeTrains);
             props.updateGraphData(
                 props.segmentId,
                 props.signalId,
@@ -187,8 +177,6 @@ export default function HeaderPanel(props) {
 
     const infoOpen = Boolean(popoverAnchor);
     const id = infoOpen ? "info-panel" : undefined;
-    console.log(props.disableChoice);
-    console.log("1=");
     return (
         <div className={classes.controlBar}>
             {!props.disableChoice && (
@@ -202,25 +190,22 @@ export default function HeaderPanel(props) {
                     >
                         <Button
                             onClick={() => handleChangeVisibility("signals")}
-                            variant={`${
-                                props.showSignals ? "contained" : "outlined"
-                            }`}
+                            variant={`${props.showSignals ? "contained" : "outlined"
+                                }`}
                         >
                             <TimelineIcon />
                         </Button>
                     </Tooltip>
                     <Tooltip
-                        title={`${
-                            props.showSpikeTrains ? "Hide" : "Show"
-                        } spiketrains`}
+                        title={`${props.showSpikeTrains ? "Hide" : "Show"
+                            } spiketrains`}
                     >
                         <Button
                             onClick={() =>
                                 handleChangeVisibility("spiketrains")
                             }
-                            variant={`${
-                                props.showSpikeTrains ? "contained" : "outlined"
-                            }`}
+                            variant={`${props.showSpikeTrains ? "contained" : "outlined"
+                                }`}
                         >
                             <ScatterPlotIcon />
                         </Button>

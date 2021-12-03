@@ -18,8 +18,6 @@ function generateTimes(n, tStart, samplingPeriod) {
 function transformSpikeData(inputData) {
     console.log(inputData);
     return Object.entries(inputData).map(([key, value]) => {
-        //console.log(key);
-        //console.log(value);
         return {
             x: value.times, // todo: scale by units?
             y: Array(value.times.length).fill(key),
@@ -81,8 +79,6 @@ export default function Visualizer(props) {
     const datastore = React.useRef(
         new DataStore(props.source, props.baseUrl || defaultBaseUrl)
     );
-    console.log("121212112");
-    console.log(props);
     React.useEffect(() => {
         if (props.segmentId) {
             setSegmentId(props.segmentId);
@@ -97,7 +93,6 @@ export default function Visualizer(props) {
             setShowSpikeTrains(true);
         }
         if (props.disableChoice) {
-            console.log("444444444444");
             setDisableChoice(true);
         }
         if (props.downSampleFactor) {
@@ -193,8 +188,6 @@ export default function Visualizer(props) {
                         props.downSampleFactor
                     )
                     .then((res) => {
-                        console.log(res);
-                        console.log(datastore.current);
                         setLabels(datastore.current.getLabels(0));
                         setSignalData(formatSignalData(res));
                         setAxisLabels({
