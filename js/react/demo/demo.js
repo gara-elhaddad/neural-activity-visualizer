@@ -39,6 +39,18 @@ function App() {
                     : value,
         });
     }
+
+    let example_attributes = `\tsource = "${state.source}"\n`
+    example_attributes += state.width ? `\twidth = {${state.width}}\n` : ""
+    example_attributes += state.height ? `\theight = {${state.height}}\n` : ""
+    example_attributes += state.downSampleFactor !== 1 ? `\tdownSampleFactor = {${state.downSampleFactor}}\n` : ""
+    example_attributes += state.ioType ? `\tioType = "${state.ioType}"\n` : ""
+    example_attributes += !state.showSignals ? `\tshowSignals = {${state.showSignals}}\n` : ""
+    example_attributes += state.showSpikeTrains ? `\tshowSpikeTrains = {${state.showSpikeTrains}}\n` : ""
+    example_attributes += state.disableChoice ? `\tdisableChoice = {${state.disableChoice}}\n` : ""
+    example_attributes += state.segmentId !== 0 ? `\tsegmentId = {${state.segmentId}}\n` : ""
+    example_attributes += state.signalId !== 0 ? `\tsignalId = {${state.signalId}}\n` : ""
+
     console.log("State");
     console.log(state);
     return (
@@ -118,7 +130,7 @@ function App() {
                 Output:
             </div>
             <div>
-                {/* <Visualizer source={source1} /> */}
+                <Visualizer source={source1} />
             </div>
             <br />
             <br />
@@ -514,10 +526,8 @@ function App() {
                 >
                     {`import Visualizer from 'neural-activity-visualizer-react'
                       ...
-                      let source_url = "${source1}"
-                      <Visualizer source={source_url} />`.replace(
-                        /\n +/g,
-                        "\n"
+                      <Visualizer
+                        ${example_attributes}/>`.replace(/\n +/g,"\n"
                     )}
                 </SyntaxHighLighter>
             </div>
