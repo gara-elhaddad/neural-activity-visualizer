@@ -247,6 +247,7 @@ export default function HeaderPanel(props) {
             <Tooltip title="Download data file">
                 <IconButton
                     target="_blank"
+                    rel="noopener noreferrer"
                     href={props.source}
                     aria-label="download"
                     className={classes.roundButtons}

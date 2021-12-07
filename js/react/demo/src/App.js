@@ -1,19 +1,16 @@
-// import Visualizer from 'neural-activity-visualizer-react';
 import React from "react";
-import ReactDOM from "react-dom";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Checkbox from "@mui/material/Checkbox";
-import Visualizer from "../src";
+import TextField from "@material-ui/core/TextField";
+import Checkbox from "@material-ui/core/Checkbox";
+import Visualizer from "test-react-app";
+// import Visualizer from 'neural-activity-visualizer-react';
 import SyntaxHighLighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/cjs/styles/hljs";
-import "./demo.css";
-import { CheckBox } from "@material-ui/icons";
+import "./App.css";
 
 const source1 =
     "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf";
-const source2 =
-    "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix";
+// const source2 =
+    // "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix";
 
 function App() {
     const [state, setState] = React.useState({
@@ -92,6 +89,7 @@ function App() {
                 <a
                     href="https://neo-viewer.brainsimulation.eu/#api_docs"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     Neo Viewer REST API
                 </a>
@@ -575,6 +573,7 @@ function App() {
                 <a
                     href="https://github.com/NeuralEnsemble/neo-viewer/issues/new"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     please let us know.
                 </a>
@@ -583,6 +582,4 @@ function App() {
     );
 }
 
-ReactDOM.render(<App />, document.getElementById("app"));
-
-module.hot.accept();
+export default App;
