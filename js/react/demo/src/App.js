@@ -1,8 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
-import Visualizer from "test-react-app";
-// import Visualizer from 'neural-activity-visualizer-react';
+import Visualizer from "neural-activity-visualizer-react";
 import SyntaxHighLighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import "./App.css";

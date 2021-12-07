@@ -572,6 +572,12 @@
   "resolved" "https://registry.npmjs.org/min-indent/-/min-indent-1.0.1.tgz"
   "version" "1.0.1"
 
+"neural-activity-visualizer-react@file:..":
+  "resolved" "file:.."
+  "version" "1.0.0"
+  dependencies:
+    "react-scripts" "3.4.3"
+
 "parse-entities@^2.0.0":
   "integrity" "sha512-kkywGpCcRYhqQIchaWqZ875wzpS/bMKhz5HnN3p7wveJTkTtyAB/AlnS0f8DFSqYW1T82t6yEAkEcB+A1I3MbQ=="
   "resolved" "https://registry.npmjs.org/parse-entities/-/parse-entities-2.0.0.tgz"
@@ -816,12 +822,6 @@
   "version" "7.2.0"
   dependencies:
     "has-flag" "^4.0.0"
-
-"test-react-app@file:..":
-  "resolved" "file:.."
-  "version" "0.1.0"
-  dependencies:
-    "react-scripts" "3.4.3"
 
 "urix@^0.1.0":
   "integrity" "sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI="
