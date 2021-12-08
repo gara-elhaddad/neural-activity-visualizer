@@ -9,11 +9,12 @@
     "react-scripts": "3.4.3"
   },
   "scripts": {
-    "build": "rollup -c",
-    "build-watch": "rollup -c -w",
+    "build-lib": "rollup -c",
+    "build-lib-watch": "rollup -c -w",
+    "build-demo": "npm run build-lib && cd demo && react-scripts build",
     "start-demo": "cd demo && npm run start",
     "i-all": "npm i && cd demo && npm i",
-    "dev": "npm-run-all --parallel build-watch start-demo"
+    "dev": "npm-run-all --parallel build-lib-watch start-demo"
   },
   "keywords": [],
   "author": "Andrew Davison <andrew.davison@cnrs.fr>, CNRS",
