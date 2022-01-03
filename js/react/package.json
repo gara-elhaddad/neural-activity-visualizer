@@ -1,6 +1,6 @@
 {
   "name": "neural-activity-visualizer-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A ReactJS component for visualizing neural activity data",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -19,7 +19,12 @@
   "keywords": [],
   "author": "Andrew Davison <andrew.davison@cnrs.fr>, CNRS",
   "license": "MIT",
-  "homepage": "https://github.com/NeuralEnsemble/neo-viewer#readme",
+  "homepage": "https://github.com/NeuralEnsemble/neo-viewer/blob/master/js/react#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NeuralEnsemble/neo-viewer.git",
+    "directory": "js/react"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
