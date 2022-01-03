@@ -23,7 +23,7 @@ function Example {
   return (
     <Visualizer source={source} />
   )
-
+}
 ```
 
 #### Interactive Demo:
