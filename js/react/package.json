@@ -1,6 +1,6 @@
 {
   "name": "neural-activity-visualizer-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A ReactJS component for visualizing neural activity data",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -52,8 +52,8 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "plotly.js": "^1.58.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "react-plotly.js": "^2.5.1"
   }
 }
