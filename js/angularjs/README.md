@@ -57,7 +57,7 @@ Instructions for doing this are [here](https://github.com/NeuralEnsemble/neo-vie
 See [here](https://neo-viewer.brainsimulation.eu/#api_docs).
 
 
-<div><img src="https://raw.githubusercontent.com/NeuralEnsemble/neo-viewer/master/eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
+<div><img src="../../eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
 
 
 ## Acknowledgements
