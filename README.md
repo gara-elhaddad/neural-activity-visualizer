@@ -1,57 +1,35 @@
 # Neural Activity Visualizer
 
-A Javascript component (built with AngularJS) for visualizing neural activity data
-(analog signals, spike trains etc.) stored in any of the file formats supported by
-the [Neo](http://neuralensemble.org/neo) library.
+A JavaScript component for visualizing neural activity data (analog signals, 
+spike trains etc.) stored in any of the file formats supported by the 
+[Neo](http://neuralensemble.org/neo) library. Implementations are available in 
+both AngularJS and ReactJS.
 
-```html
-<div ng-app="neo-visualizer">
-    <visualizer-view
-        source="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf"
-        height=400>
-    </visualizer-view>
-</div>
-```
+## Quick overview
 
-For an example of the visualizer in action, see https://neo-viewer.brainsimulation.eu
+The component was developed to produce graphical representations of neural activity data based on the Neo object model. [Neo](http://neuralensemble.org/neo) is an open source API implemented in Python supporting many file formats, including several proprietary formats (e.g. AlphaOmega, Plexon, NeuroExplorer), open formats (e.g. Neurodata Without Borders, Klustakwik, Elan) and generic file formats (e.g. MATLAB, ASCII, HDF5). Neo loads this data into a common object model with the aim of increasing interoperability of various software tools used in electrophysiology and thus facilitating sharing of data between different projects. Neo's focus is solely on the structure of the data, with separate tools being required for their analysis. Our compoment comes in at this stage by enabling interactive visualization of data. It makes use of the open source [Plotly](https://plotly.com/javascript/) library for visualisation, owing to its efficiency in handling large data, and [Django](https://www.djangoproject.com/) Python web framework for the backend.
 
-## Using the visualizer component
 
-Within the `<head>` block of your HTML page, put the following lines:
+## AngularJS (v1) component
 
-```
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.css">
+Live demo: 
+https://neo-viewer.brainsimulation.eu/
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular-resource.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.9/angular-nvd3.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/apdavison/neural-activity-visualizer@reorg/js/src/visualizer.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/apdavison/neural-activity-visualizer@reorg/js/src/services.js"></script>
-```
 
-In the `<body>` block, add `<div ng-app="neo-visualizer">...</div` around the part of the page where the visualizer should appear.
+For more details, see [here](https://github.com/appukuttan-shailesh/neo-viewer/blob/master/js/angularjs/README.md).
 
-You can have multiple visualizers on a single page. Wherever you want to have a visualizer, include
-```
-<visualizer-view 
-    source="https://example.com/my_data_file.abf" 
-    height=300>
-</visualizer-view>
-```
-where `source` should be the URL of a publicly available data file you want to visualize.
 
-### Configuring the app to use a different file server
+## ReactJS component
 
-Coming soon!
+Live demo:
+https://neo-viewer.netlify.app/
+
+For more details, see [here](https://github.com/appukuttan-shailesh/neo-viewer/blob/master/js/react/README.md).
+
 
 ## Deploying the file server
 
-By default, the visualizer uses the Neo file server at https://neo-viewer.brainsimulation.eu/. This is fine for testing and light use, but for better performance you may
-wish to deploy your own server on a more powerful machine.
-
+By default, the visualizer uses the Neo file server at https://neo-viewer.brainsimulation.eu/. This is fine for testing and light use, but for better performance you may wish to deploy your own server on a more powerful machine.
 Instructions for doing this are [here](https://github.com/NeuralEnsemble/neo-viewer/blob/master/api/README.md#deployment).
 
 
@@ -60,7 +38,7 @@ Instructions for doing this are [here](https://github.com/NeuralEnsemble/neo-vie
 See [here](https://neo-viewer.brainsimulation.eu/#api_docs).
 
 
-<div><img src="https://raw.githubusercontent.com/HumanBrainProject/hbp-validation-client/master/eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
+<div><img src="eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
 
 
 ## Acknowledgements

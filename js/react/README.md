@@ -28,14 +28,24 @@ function Example {
 
 #### Interactive Demo:
 
-Explore the demo app: https://neo-viewer.netlify.app/
+Explore the demo app:
+https://neo-viewer.netlify.app/
 
 
-## License
+## Deploying the file server
 
-MIT © [apdavison](https://github.com/apdavison)
+By default, the visualizer uses the Neo file server at https://neo-viewer.brainsimulation.eu/. This is fine for testing and light use, but for better performance you may
+wish to deploy your own server on a more powerful machine.
 
-<div><img src="https://raw.githubusercontent.com/HumanBrainProject/hbp-validation-client/master/eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
+Instructions for doing this are [here](https://github.com/NeuralEnsemble/neo-viewer/blob/master/api/README.md#deployment).
+
+
+## Reference: the file server REST API
+
+See [here](https://neo-viewer.brainsimulation.eu/#api_docs).
+
+
+<div><img src="../../eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
 
 
 ## Acknowledgements
