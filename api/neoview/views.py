@@ -23,9 +23,11 @@ logger = logging.getLogger(__name__)
 def custom_get_io(filename):
     try:
         io = get_io(filename)
-    except AssertionError as err:
+    except (AssertionError, OSError) as err:
         if "try_signal_grouping" in str(err):
             io = neo.io.Spike2IO(filename, try_signal_grouping=False)
+        elif "File extension DAT not registered" in str(err):
+            io = neo.io.ElphyIO(filename)
         else:
             raise
     return io
