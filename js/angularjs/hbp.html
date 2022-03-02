@@ -1,4 +1,3 @@
-{% verbatim %}
 <html>
 
 <head>
@@ -7,12 +6,15 @@
     <meta name="viewport" content="width=device-width">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.css">
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular-resource.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.51.1/plotly.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/NeuralEnsemble/neo-viewer@master/js/angularjs/src/visualizer.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/NeuralEnsemble/neo-viewer@master/js/angularjs/src/services.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-nvd3/1.0.9/angular-nvd3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/apdavison/neural-activity-visualizer@f37f22a/js/src/visualizer.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/apdavison/neural-activity-visualizer@f37f22a/js/src/services.js"></script>
 </head>
 
 <body>
@@ -45,13 +47,13 @@
 
             <p>
                 This project has received funding from the European Union’s Horizon 2020 Framework Programme
-                for Research and Innovation under Specific Grant Agreements No. 720270, No. 785907 and No. 945539 (Human Brain Project SGA1, SGA2 and SGA3).
+                for Research and Innovation under the Specific Grant Agreement No. 785907 (Human Brain Project SGA2).
             </p>
 
         </div>
 
         <div class="row" ng-app="neo-visualizer">
-            <h2 id="example_static_source">Example</h2>
+            <h2>Example</h2>
             <pre>
 &lt;head&gt;
     ...
@@ -79,14 +81,12 @@
     &lt;/div&gt;
 &lt;/body&gt;
             </pre>
-            <div>
             <visualizer-view
                 source="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf"
                 height=300>
             </visualizer-view>
-            </div>
 
-            <h2 id="example_dynamic_source">Example with dynamic source</h2>
+            <h2>Example with dynamic source</h2>
             <pre ng-non-bindable>
 &lt;div ng-controller="URLFormController"&gt;
     &lt;form class="form-inline"&gt;
@@ -95,7 +95,7 @@
             &lt;input type="text" class="form-control" ng-model="dataFileURL" id="dataFileURL" placeholder="enter data file URL here" style="width: 600px;"&gt;
         &lt;/div&gt;
         &lt;/form&gt;
-
+        
     &lt;visualizer-view ng-if="dataFileURL"
         source="{{dataFileURL}}"
         height=300&gt;
@@ -109,23 +109,16 @@
                       <input type="text" class="form-control" ng-model="dataFileURL" id="dataFileURL" placeholder="enter data file URL here" style="width: 600px;">
                     </div>
                   </form>
-
+                  
                 <visualizer-view ng-if="dataFileURL"
                     source="{{dataFileURL}}"
-                    height=300>
-                </visualizer-view>
-            </div>
-            <h2 id="example_spike_trains">Example with spike trains</h2>
-            <div>
-                <visualizer-view
-                    source="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix"
                     height=300>
                 </visualizer-view>
             </div>
         </div>
 
         <div class="row">
-            <h2 id="api_docs">API Documentation</h2>
+            <h2>API Documentation</h2>
 
             <p>
                 The API follows the Neo container structure: the outermost container is the <strong>Block</strong>,
@@ -135,7 +128,7 @@
             </p>
 
             <p class="alert alert-warning">
-                <strong>Events</strong> and <strong>Epochs</strong> are not yet supported,
+                <strong>Spiketrains</strong>, <strong>Events</strong> and <strong>Epochs</strong> are not yet supported,
                 but are coming soon!
             </p>
 
@@ -143,7 +136,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 id="api_blockdata" class="panel-title">/blockdata/</h3>
+                    <h3 class="panel-title">/blockdata/</h3>
                     <p>Return a list of all the <strong>Blocks</strong> in the file.</p>
                 </div>
                 <div class="panel-body">
@@ -226,7 +219,7 @@
 
             <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 id="api_segmentdata" class="panel-title">/segmentdata/</h3>
+                        <h3 class="panel-title">/segmentdata/</h3>
                         <p>Return information about an individual <strong>Segment</strong>,
                         including metadata about the signals contained in the segment,
                         but not the signal data themselves.</p>
@@ -296,7 +289,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 id="api_analogsignaldata" class="panel-title">/analogsignaldata/</h3>
+                    <h3 class="panel-title">/analogsignaldata/</h3>
                     <p>Return an individual <strong>AnalogSignal</strong>,
                        both metadata and the data array.</p>
                 </div>
@@ -366,4 +359,3 @@
 </body>
 
 </html>
-{% endverbatim %}

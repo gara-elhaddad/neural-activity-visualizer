@@ -5,7 +5,7 @@ from any file format supported by [Neo](http://neuralensemble.org/neo) and expos
 
 ## API Documentation
 
-TODO
+See [here](https://neo-viewer.brainsimulation.eu/#api_docs).
 
 ## Deployment
 
@@ -35,3 +35,10 @@ To check everything has worked, run
 ```
 docker logs neo-viewer
 ```
+
+
+<div><img src="../eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>
+
+
+## Acknowledgements
+This open source software code was developed in part or in whole in the Human Brain Project, funded from the European Union's Horizon 2020 Framework Programme for Research and Innovation under Specific Grant Agreements No. 720270, No. 785907 and No. 945539 (Human Brain Project SGA1, SGA2 and SGA3).
