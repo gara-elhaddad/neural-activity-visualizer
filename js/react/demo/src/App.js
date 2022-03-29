@@ -1,5 +1,9 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Checkbox from "@material-ui/core/Checkbox";
 import Visualizer from "neural-activity-visualizer-react";
 import SyntaxHighLighter from "react-syntax-highlighter";
@@ -13,6 +17,7 @@ const source1 =
 
 function App() {
     const [state, setState] = React.useState({
+        sourceRadio: "sampleAnalogSignal",
         source: source1,
         width: "",
         height: "",
@@ -26,14 +31,45 @@ function App() {
     });
 
     function handleChange(evt) {
-        const value = evt.target.value;
-        setState({
-            ...state,
-            [evt.target.name]:
-                evt.target.type === "checkbox"
-                    ? !state[evt.target.name]
-                    : value,
-        });
+        console.log(evt.target.name);
+        console.log(evt.target.value);
+        let name = evt.target.name;
+        let value = evt.target.value;
+
+        if (name === "sourceRadio") {
+            let urlValue = ""
+            let showSignals = false;
+            let showSpikeTrains = false;
+            if (value === "sampleAnalogSignal") {
+                urlValue = "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf"
+                showSignals = true;
+                showSpikeTrains = false;
+            } else if (value === "sampleSpikeTrain") {
+                urlValue = "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix"
+                showSignals = false;
+                showSpikeTrains = true;
+            } else {
+                // set source input text field to empty when 'Other' radio selected 
+                urlValue = ""
+                showSignals = true;
+                showSpikeTrains = false;
+            }
+            setState({
+                ...state,
+                source: urlValue,
+                [name]: value,
+                showSignals: showSignals,
+                showSpikeTrains: showSpikeTrains
+            });
+        } else {
+            setState({
+                ...state,
+                [name]:
+                    evt.target.type === "checkbox"
+                        ? !state[name]
+                        : value,
+            });
+        }
     }
 
     let example_attributes = `\tsource = "${state.source}"\n`
@@ -47,7 +83,6 @@ function App() {
     example_attributes += state.segmentId !== 0 ? `\tsegmentId = {${state.segmentId}}\n` : ""
     example_attributes += state.signalId !== 0 ? `\tsignalId = {${state.signalId}}\n` : ""
 
-    console.log("State");
     console.log(state);
     return (
         <div className="container">
@@ -143,10 +178,25 @@ function App() {
                 Attributes:
             </div>
             <br />
+            
+            <FormControl style={{ marginLeft: 10 }}>
+                <span style={{ fontFamily: "monospace", fontSize: 18, marginBottom: 5 }}>source</span>
+                <RadioGroup
+                    row
+                    defaultValue="sampleAnalogSignal"
+                    name="sourceRadio"
+                    onChange={handleChange}
+                >
+                    <FormControlLabel value="sampleAnalogSignal" control={<Radio />} label={(<span>Sample Analog Signal <a href="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf">(source)</a></span>)} />
+                    <FormControlLabel value="sampleSpikeTrain" control={<Radio />} label={(<span>Sample Spike Train <a href="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix">(source)</a></span>)} />
+                    <FormControlLabel value="other" control={<Radio />} label="Other" />
+                </RadioGroup>
+            </FormControl>
+            <br /><br />
             <div style={{ marginBottom: "20px" }}>
                 <TextField
+                    disabled={state.sourceRadio!=="other"}
                     name="source"
-                    label="source"
                     value={state.source}
                     onChange={handleChange}
                     // defaultValue={this.state.name}
@@ -164,6 +214,7 @@ function App() {
                     helperText="URL of source data file"
                 />
             </div>
+
             <table
                 className="text"
                 border="1"
@@ -365,7 +416,7 @@ function App() {
                                 }}
                             >
                                 Option to enable/disable display of signals
-                                panel on page loading. Default is true (i.e.
+                                panel on loading. Default is true (i.e.
                                 will display the signal panel).
                             </div>
                         </td>
@@ -395,7 +446,7 @@ function App() {
                                 }}
                             >
                                 Option to enable/disable display of spiketrain
-                                panel on page loading. Default is false (i.e.
+                                panel on loading. Default is false (i.e.
                                 will not display the spiketrain panel).
                             </div>
                         </td>
@@ -425,7 +476,7 @@ function App() {
                                 }}
                             >
                                 Option to enable/disable display of buttons to
-                                hide/unhide siganl and spiketrain panel. Default
+                                hide/unhide signal and spiketrain panel. Default
                                 is false (i.e. will give users access to these
                                 buttons).
                             </div>
@@ -465,7 +516,7 @@ function App() {
                                     marginRight: 20,
                                 }}
                             >
-                                Data segment to be displayed on page loading. Default value = 0, i.e. loads segment #0.
+                                Data segment to be displayed on loading. Default value = 0, i.e. loads segment #0.
                             </div>
                         </td>
                     </tr>
@@ -503,7 +554,7 @@ function App() {
                                     marginRight: 20,
                                 }}
                             >
-                                Signal to be displayed on page loading. Default value = 0, i.e. loads signal #0.
+                                Signal to be displayed on loading. Default value = 0, i.e. loads signal #0.
                             </div>
                         </td>
                     </tr>
@@ -535,6 +586,7 @@ function App() {
                 Output:
             </div>
             <div>
+            {/* < div id='divVisualizer' style={{position: 'fixed', bottom: '0px', left: 'auto', right: 'auto', width: '800px', height:'250px', border: '3px solid #73AD21', backgroundColor: 'white'}} > */}
                 <Visualizer
                     key={JSON.stringify(state)}
                     source={state.source}
