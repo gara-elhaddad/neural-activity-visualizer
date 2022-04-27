@@ -669,7 +669,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource'])
                 <div class="panel-heading">
                     <p>
                     <button type="button" class="btn btn-link" ng-click="showAnnotations = !showAnnotations"><span class="glyphicon glyphicon-info-sign"></span></button>
-                    {{file_name}}
+                    {{source}}
                     <a type="button" class="btn" href="{{source}}"><span class="glyphicon glyphicon-download-alt"></span></a>
                     </p>
                     <div ng-show="showAnnotations">
