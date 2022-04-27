@@ -92,7 +92,7 @@ function App() {
                 <div className="title-container">
                     <img
                         className="ebrains-icon-small"
-                        src="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/EBRAINS_live_papers/resources/logos/EBRAINS.png"
+                        src="./imgs/ebrains_logo.svg"
                         alt="EBRAINS logo"
                         style={{
                             width: "50px",
