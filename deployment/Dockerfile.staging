@@ -40,7 +40,7 @@ COPY api $SITEDIR/api
 COPY homepage $SITEDIR/homepage
 COPY --from=build /js/react/demo/build $SITEDIR/react
 
-WORKDIR $SITEDIR
+WORKDIR $SITEDIR/api
 RUN if [ -f $SITEDIR/db.sqlite3 ]; then rm $SITEDIR/db.sqlite3; fi
 RUN python3 manage.py check
 RUN python3 manage.py migrate
