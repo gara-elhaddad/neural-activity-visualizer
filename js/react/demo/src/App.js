@@ -31,8 +31,8 @@ function App() {
     });
 
     function handleChange(evt) {
-        console.log(evt.target.name);
-        console.log(evt.target.value);
+        // console.log(evt.target.name);
+        // console.log(evt.target.value);
         let name = evt.target.name;
         let value = evt.target.value;
 
@@ -83,45 +83,47 @@ function App() {
     example_attributes += state.segmentId !== 0 ? `\tsegmentId = {${state.segmentId}}\n` : ""
     example_attributes += state.signalId !== 0 ? `\tsignalId = {${state.signalId}}\n` : ""
 
-    console.log(state);
+    // console.log(state);
     return (
         <div className="container">
             <br />
-            <br />
-            <div className="rounded-box">
-                <div className="title-container">
-                    <img
-                        className="ebrains-icon-small"
-                        src="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/EBRAINS_live_papers/resources/logos/EBRAINS.png"
-                        alt="EBRAINS logo"
-                        style={{
-                            width: "50px",
-                            height: "50px",
-                            verticalAlign: "middle",
-                        }}
-                    />
-                    <span
-                        className="title-style"
-                        style={{ paddingLeft: "15px", verticalAlign: "middle" }}
-                    >
-                        Neural Activity Visualizer
-                    </span>
-                    <div
-                        className="subtitle-style"
-                        style={{ paddingTop: "30px" }}
-                    >
-                        Javascript component for visualizing neural activity
-                        data
-                    </div>
-                </div>
+            <div className="box rounded centered"
+                style={{ marginTop: "5px", paddingTop: "0.75em", paddingBottom: "0.75em" }}>
+                <a
+                    href="https://ebrains.eu/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="waves-effect waves-light"
+                    style={{ textAlign: "center", color: "black" }}
+                >
+                    <table>
+                    <tbody>
+                        <tr>
+                        <td
+                            style={{ paddingTop: "0px",
+                                    paddingBottom: "0px" }}>
+                            <img
+                            className="ebrains-icon-small"
+                            src="./imgs/ebrains_logo.svg"
+                            alt="EBRAINS logo"
+                            style={{ height: "60px" }}
+                            />
+                        </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </a>
+                <h5 className="title-style">Neural Activity Visualizer</h5>
             </div>
-            <br />
-            <div className="text" style={{ margin: "25px" }}>
+
+            <h5 style={{textAlign:"center", lineHeight: "2", fontWeight: "bolder"}}>ReactJS Component</h5>
+
+            <div class="text" style={{margin: "15px 35px 15px 35px"}}>
                 The neural-activity-visualizer Javascript app, enables
                 web-browser visualisation of electrophysiology datafiles in any
                 format supported by the Neo library. It makes use of the{" "}
                 <a
-                    href="https://neo-viewer.brainsimulation.eu/#api_docs"
+                    href="https://neo-viewer.brainsimulation.eu/api_docs"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -129,11 +131,32 @@ function App() {
                 </a>
                 .
             </div>
+            <hr />
+            <h5 style={{ marginLeft: 0, lineHeight: 2 }}>
+                Installation
+            </h5>
+            <div
+                className="text"
+                style={{ marginLeft: 10, marginTop: 25 }}
+            >   
+                The <code>neural-activity-visualizer-react</code> app can be
+                installed via <code>npm</code> as follows:
+                <br />
+                <div>
+                <SyntaxHighLighter
+                    language="javascript"
+                    style={docco}
+                    codeTagProps={{ style: { fontSize: 16, lineHeight: 2 } }}
+                >
+                    npm install --save neural-activity-visualizer-react
+                </SyntaxHighLighter>
+            </div>
+            </div>
             <br />
             <hr />
-            <h2 className="text" style={{ marginLeft: 0 }}>
+            <h5 style={{ marginLeft: 0, lineHeight: 2 }}>
                 Example: Basic usage
-            </h2>
+            </h5>
             <div
                 className="text"
                 style={{ marginLeft: 10, marginTop: 25, fontWeight: "bold" }}
@@ -168,9 +191,9 @@ function App() {
             <br />
             <hr />
 
-            <h2 className="text" style={{ marginLeft: 0 }}>
+            <h5 style={{ marginLeft: 0, lineHeight: 2 }}>
                 Example: Interactive Demo
-            </h2>
+            </h5>
             <div
                 className="text"
                 style={{ marginLeft: 10, marginTop: 25, fontWeight: "bold" }}
@@ -187,9 +210,9 @@ function App() {
                     name="sourceRadio"
                     onChange={handleChange}
                 >
-                    <FormControlLabel value="sampleAnalogSignal" control={<Radio />} label={(<span>Sample Analog Signal <a href="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf">(source)</a></span>)} />
-                    <FormControlLabel value="sampleSpikeTrain" control={<Radio />} label={(<span>Sample Spike Train <a href="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix">(source)</a></span>)} />
-                    <FormControlLabel value="other" control={<Radio />} label="Other" />
+                    <FormControlLabel value="sampleAnalogSignal" control={<Radio />} label={(<span style={{color: "black"}}>Sample Analog Signal <a href="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf">(source)</a></span>)} />
+                    <FormControlLabel value="sampleSpikeTrain" control={<Radio />} label={(<span style={{color: "black"}}>Sample Spike Train <a href="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix">(source)</a></span>)} />
+                    <FormControlLabel value="other" control={<Radio />} label={(<span style={{color: "black"}}>Other</span>)} />
                 </RadioGroup>
             </FormControl>
             <br /><br />
@@ -203,12 +226,13 @@ function App() {
                     // onBlur={this.handleFieldChange}
                     variant="outlined"
                     fullWidth
-                    InputLabelProps={{
+                    InputProps={{
                         style: {
                             fontSize: 18,
                             // fontWeight: "bold",
                             color: "#000000",
                             fontFamily: "monospace",
+                            padding: "5px 10px 5px 10px",
                         },
                     }}
                     helperText="URL of source data file"
@@ -359,7 +383,7 @@ function App() {
                             ioType
                         </td>
                         <td>
-                            <div style={{ width: "20ch" }}>
+                            <div style={{ width: "15ch" }}>
                                 <TextField
                                     name="ioType"
                                     label=""
