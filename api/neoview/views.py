@@ -90,6 +90,7 @@ class NeoViewError(Exception):
 
 
 def get_block(request):
+    # import pdb;pdb.set_trace()
     if not request.GET.get('url'):
         raise NeoViewError('URL parameter is missing', status.HTTP_400_BAD_REQUEST)
 
@@ -120,12 +121,14 @@ def get_block(request):
             raise NeoViewError('incorrect file type',
                                status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
                                str(err))
+    # return None
     return block, na_file, lazy
 
 
 class Block(APIView):
 
     def get(self, request, format=None, **kwargs):
+        import pdb;pdb.set_trace()
         try:
             block, na_file, lazy =  get_block(request)
         except NeoViewError as err:
@@ -137,11 +140,13 @@ class Block(APIView):
             # 'channel_indexes': block.channel_indexes,
             'description': block.description or "",
             # 'file_datetime': block.file_datetime,
-            'file_origin': block.file_origin or "",
+            # 'file_origin': block.file_origin or "",
             # 'index': block.index,
             'name': block.name or "",
             'rec_datetime': block.rec_datetime,
-            'file_name': na_file,
+            'source': request.GET.get('url'),
+            # 'file_name': na_file,
+            'file_name': os.path.basename(urlparse(request.GET.get('url')).path),
             'segments': [
                 {
                     'name': s.name or "",
@@ -153,7 +158,7 @@ class Block(APIView):
                     'rec_datetime': s.rec_datetime,
                     'irregularlysampledsignals': [],
                     # 'index': s.index,
-                    'file_origin': s.file_origin or "",
+                    # 'file_origin': s.file_origin or "",
                     # 'block': s.block,
                     'analogsignals': [],
                 }
@@ -233,7 +238,7 @@ class Segment(APIView):
         seg_data = {
                     'name': segment.name or "",
                     'description': segment.description or "",
-                    'file_origin': segment.file_origin or "",
+                    # 'file_origin': segment.file_origin or "",
                     'annotations': _handle_dict(segment.annotations),
                     'spiketrains': [{} for s in segment.spiketrains],
                     'analogsignals': [{} for a in segment.analogsignals],

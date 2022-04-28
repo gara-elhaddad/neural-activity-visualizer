@@ -669,7 +669,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource'])
                 <div class="panel-heading">
                     <p>
                     <button type="button" class="btn btn-link" ng-click="showAnnotations = !showAnnotations"><span class="glyphicon glyphicon-info-sign"></span></button>
-                    {{source}}
+                    {{file_name}}
                     <a type="button" class="btn" href="{{source}}"><span class="glyphicon glyphicon-download-alt"></span></a>
                     </p>
                     <div ng-show="showAnnotations">
@@ -677,7 +677,7 @@ angular.module('neo-visualizer', ['ng', 'ngResource'])
                         <table class="table table-striped table-condensed">
                             <tr><td>Source:</td><td>{{source}}</td></tr>
                             <tr><td>Name:</td><td>{{block.name}}</td></tr>
-                            <tr><td>File origin:</td><td>{{block.file_origin}}</td></tr>
+                            <!--<tr><td>File origin:</td><td>{{block.file_origin}}</td></tr>-->
                             <tr><td>Recording date:</td><td>{{block.rec_datetime}}</td></tr>
                             <tr><td>Segments:</td><td>{{block.segments.length}}</td></tr>
                         </table>
