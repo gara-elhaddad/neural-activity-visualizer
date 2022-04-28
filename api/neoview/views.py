@@ -90,7 +90,6 @@ class NeoViewError(Exception):
 
 
 def get_block(request):
-    # import pdb;pdb.set_trace()
     if not request.GET.get('url'):
         raise NeoViewError('URL parameter is missing', status.HTTP_400_BAD_REQUEST)
 
@@ -128,7 +127,6 @@ def get_block(request):
 class Block(APIView):
 
     def get(self, request, format=None, **kwargs):
-        import pdb;pdb.set_trace()
         try:
             block, na_file, lazy =  get_block(request)
         except NeoViewError as err:
