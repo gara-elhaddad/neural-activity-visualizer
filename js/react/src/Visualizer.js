@@ -5,7 +5,7 @@ import GraphPanel from "./GraphPanel";
 import SpikeTrainPanel from "./SpikeTrainPanel";
 import ErrorPanel from "./ErrorPanel";
 
-const defaultBaseUrl = "https://neo-viewer-dev.brainsimulation.eu/api";
+const defaultBaseUrl = "https://neo-viewer.brainsimulation.eu/api";
 
 function generateTimes(n, tStart, samplingPeriod) {
     const times = Array(n);
