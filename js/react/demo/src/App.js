@@ -123,7 +123,7 @@ function App() {
                 web-browser visualisation of electrophysiology datafiles in any
                 format supported by the Neo library. It makes use of the{" "}
                 <a
-                    href="/api_docs"
+                    href="/api-docs"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
