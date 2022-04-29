@@ -161,9 +161,9 @@ export default function Visualizer(props) {
                         props.downSampleFactor
                     )
                     .then((results) => {
-                        if (res
-                            && Object.keys(res).length === 0
-                            && Object.getPrototypeOf(res) === Object.prototype) {
+                        if (results
+                            && Object.keys(results).length === 0
+                            && Object.getPrototypeOf(results) === Object.prototype) {
                             throw "empty"
                         }
                         setLabels(datastore.current.getLabels(0));
