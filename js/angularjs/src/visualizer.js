@@ -307,11 +307,23 @@ angular.module('neo-visualizer', ['ng', 'ngResource'])
                 }
                 $scope.switchSegment();
             },
-            function(err) {
-                console.log("Error in getting block");
-                $scope.error = err;
+            // function(err) {
+            //    console.log("Error in getting block");
+            //    $scope.error = err;
+            //}
+        ).catch(function(response) {
+            const text = response.data;
+            console.log(text);
+            if (text.includes("Not Found") === true) {
+                $scope.error = "Error: Specified URL does not exist (no file at location)"
             }
-        );
+            else if (text.includes("File extension") === true) {
+                $scope.error = "Error: File (extension) is not supported by NeoViewer currently"
+            }
+            else {
+                $scope.error = "Error: There was a problem reading data from the file"
+            }
+        });
     }
 
     $scope.$watch("source", function() {
@@ -748,9 +760,6 @@ angular.module('neo-visualizer', ['ng', 'ngResource'])
                 <div id={{divid}}></div> 
             </div>
             <div ng-show="error" class="panel panel-error">
-                <div class="panel-heading">
-                    <p>Error</p>
-                </div>
                 <div class="panel-body">
                     {{error}}
                 </div>

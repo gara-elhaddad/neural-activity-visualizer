@@ -49,7 +49,7 @@
                 <h5 class="title-style">Neural Activity Visualizer</h5>
             </div>
 
-            <h5 style="text-align: center; line-height: 2; font-weight: bolder;">AngularJS Component</h5>
+            <h5 style="text-align: center; line-height: 2; font-weight: bolder;">AngularJS Component test</h5>
 
             <div class="text" style="margin: 15px 35px 15px 35px;">
                 The neural-activity-visualizer Javascript app, enables web-browser
@@ -103,7 +103,18 @@
 
             <hr style="color: #CCCCCC">
 
+            <h5 style="line-height: 49.2px">Example With Spike Trains</h5>
+            <div class="row angular-container">
+                <visualizer-view
+                    source="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix"
+                    height=300>
+                </visualizer-view>
+            </div>
+
+            <hr style="color: #CCCCCC">
+
             <h5 style="line-height: 49.2px">Example With Dynamic Source</h5>
+            <p>You can input a custom data file URL below.</p>
             <pre><code class="language-html">&lt;div ng-controller="URLFormController"&gt;
     &lt;form class="form-inline"&gt;
         &lt;div class="form-group"&gt;
@@ -136,14 +147,52 @@
 
             <hr style="color: #CCCCCC">
 
-            <h5 style="line-height: 49.2px">Example With Spike Trains</h5>
-            <div class="row angular-container">
-                <visualizer-view
-                    source="https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/test/spiketrainsx2a.nix"
+            <h5 style="line-height: 49.2px">Examples of multiple file types</h5>
+            NeoViewer supports a variety of filetypes. The dropdown below provides 
+            examples of several such file formats that can be visualized.
+            <br /><br />
+
+            <script>
+                function setTextURL() {
+                  var x = document.getElementById("dataFileURLselect").value;
+                  document.getElementById("showSelectURL").value = x;
+                }
+            </script>
+
+            <div ng-controller="URLFormController">
+                <form class="form-inline angular-container">
+                    <label for="dataFileURLselect">Choose a filetype:</label>
+                    <select id="dataFileURLselect" name="dataFileURLselect" style="display: block;" ng-model="dataFileURLselect" id="dataFileURLselect" onclick="setTextURL()">
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/nwb/H19.29.141.11.21.01.nwb">NWB</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/axon/File_axon_1.abf">Axon</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/brainwaresrc/block_300ms_4rep_1clust_part_ch1.src">Brainwaresrc</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/intan/intan_rhd_test_1.rhd">Intan (.rhd)</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/intan/intan_rhs_test_1.rhs">Intan (.rhs)</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/micromed/File_micromed_1.TRC">Micromed</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/neuralynx/BML/plain_data/CSC1_trunc.txt">Neuralynx</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/neuroexplorer/File_neuroexplorer_1.nex">Neuroexplorer</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/plexon/File_plexon_3.plx">Plexon</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/rawbinarysignal/File_rawbinary_10kHz_2channels_16bit.raw">Rawbinarysignal</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/spike2/130322-1LY.smr">Spike2</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/tridesclous/tdc_example0/channel_group_0/segment_0/processed_signals.raw">Tridesclous</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/winedr/File_WinEDR_1.EDR">Winedr</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/winwcp/File_winwcp_1.wcp">Winwcp</option>
+                    </select>
+                    <br />
+                    <label for="showSelectURL">Sample file URL:</label>
+                    <input type="text" class="form-control" id="showSelectURL" value="<< select a file from above dropdown >>" disabled />
+                </form>
+                <br/>
+                <div class="row angular-container">
+                    <visualizer-view ng-if="dataFileURLselect" 
+                    source="{{dataFileURLselect}}"
                     height=300>
-                </visualizer-view>
+                    </visualizer-view>
+                </div>
             </div>
-            <br>
+
+            <br/>
+              
             <div class="rainbow-row">
                 <div></div>
                 <div></div>
