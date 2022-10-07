@@ -19,6 +19,7 @@ function App() {
     const [state, setState] = React.useState({
         sourceRadio: "sampleAnalogSignal",
         source: source1,
+        selectedFileTypeURL: "",
         width: "",
         height: "",
         downSampleFactor: 1,
@@ -61,6 +62,11 @@ function App() {
                 showSignals: showSignals,
                 showSpikeTrains: showSpikeTrains
             });
+        } else if (name === "dataFileURLselect") {            
+            setState({
+                ...state,
+                selectedFileTypeURL: value,
+            });
         } else {
             setState({
                 ...state,
@@ -83,7 +89,7 @@ function App() {
     example_attributes += state.segmentId !== 0 ? `\tsegmentId = {${state.segmentId}}\n` : ""
     example_attributes += state.signalId !== 0 ? `\tsignalId = {${state.signalId}}\n` : ""
 
-    // console.log(state);
+    console.log(state.selectedFileTypeURL);
     return (
         <div className="container">
             <br />
@@ -97,20 +103,18 @@ function App() {
                     style={{ textAlign: "center", color: "black" }}
                 >
                     <table>
-                    <tbody>
-                        <tr>
-                        <td
-                            style={{ paddingTop: "0px",
-                                    paddingBottom: "0px" }}>
-                            <img
-                            className="ebrains-icon-small"
-                            src="./imgs/ebrains_logo.svg"
-                            alt="EBRAINS logo"
-                            style={{ height: "60px" }}
-                            />
-                        </td>
-                        </tr>
-                    </tbody>
+                        <tbody>
+                            <tr>
+                                <td style={{ paddingTop: "0px", paddingBottom: "0px" }}>
+                                    <img
+                                        className="ebrains-icon-small"
+                                        src="./imgs/ebrains_logo.svg"
+                                        alt="EBRAINS logo"
+                                        style={{ height: "60px" }}
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </a>
                 <h5 className="title-style">Neural Activity Visualizer</h5>
@@ -187,6 +191,52 @@ function App() {
             <div>
                 <Visualizer source={source1} />
             </div>
+            <br />
+            <br />
+            <hr />
+
+            <h5 style={{ marginLeft: 0, lineHeight: 2 }}>
+                Demo: Multiple file types
+            </h5>
+            <p>
+                NeoViewer supports a variety of filetypes. 
+                The dropdown below provides examples of several such file formats that can be visualized.
+            </p>
+
+            <div>
+                <form>
+                    <b>Choose a filetype:</b>
+                    <select id="dataFileURLselect" style={{display:"block", width:"500px"}}  name="dataFileURLselect" onChange={handleChange}>
+                        <option value="">-- Select File Type --</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/nwb/H19.29.141.11.21.01.nwb">NWB</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/axon/File_axon_1.abf">Axon</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/brainwaresrc/block_300ms_4rep_1clust_part_ch1.src">Brainwaresrc</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/intan/intan_rhd_test_1.rhd">Intan (.rhd)</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/intan/intan_rhs_test_1.rhs">Intan (.rhs)</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/micromed/File_micromed_1.TRC">Micromed</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/neuralynx/BML/plain_data/CSC1_trunc.txt">Neuralynx</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/neuroexplorer/File_neuroexplorer_1.nex">Neuroexplorer</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/plexon/File_plexon_3.plx">Plexon</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/rawbinarysignal/File_rawbinary_10kHz_2channels_16bit.raw">Rawbinarysignal</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/spike2/130322-1LY.smr">Spike2</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/tridesclous/tdc_example0/channel_group_0/segment_0/processed_signals.raw">Tridesclous</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/winedr/File_WinEDR_1.EDR">Winedr</option>
+                        <option value="https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/winwcp/File_winwcp_1.wcp">Winwcp</option>
+                    </select>
+                    <br />
+                    <b>Sample file URL:</b>
+                    <input id="showSelectURL" type="text" value={state.selectedFileTypeURL === "" ? "<< select a file from above dropdown >>" : state.selectedFileTypeURL} disabled />
+                </form>
+                {
+                    state.selectedFileTypeURL
+                    &&
+                    <Visualizer 
+                        key={JSON.stringify(state)}
+                        source={state.selectedFileTypeURL}
+                    />
+                }                
+            </div>
+
             <br />
             <br />
             <hr />
