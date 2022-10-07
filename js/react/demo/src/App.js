@@ -89,7 +89,6 @@ function App() {
     example_attributes += state.segmentId !== 0 ? `\tsegmentId = {${state.segmentId}}\n` : ""
     example_attributes += state.signalId !== 0 ? `\tsignalId = {${state.signalId}}\n` : ""
 
-    console.log(state.selectedFileTypeURL);
     return (
         <div className="container">
             <br />
