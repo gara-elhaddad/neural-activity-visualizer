@@ -12,6 +12,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework import status
+from pathlib import Path
 
 from neo.io import get_io
 import neo
@@ -28,6 +29,10 @@ def custom_get_io(filename):
             io = neo.io.Spike2IO(filename, try_signal_grouping=False)
         elif "File extension DAT not registered" in str(err):
             io = neo.io.ElphyIO(filename)
+        elif "File extension ABF not registered" in str(err):
+            filename = Path(filename)
+            new_filename = filename.rename(filename.with_suffix(".abf"))
+            io = get_io(new_filename)
         else:
             raise
     return io
