@@ -8,7 +8,7 @@
 #  docker run -d -p 443 neo-viewer
 #
 
-FROM node:16-alpine as build
+FROM docker-registry.ebrains.eu/neuralactivity/node:16-alpine as build
 
 WORKDIR /js/react
 ENV PATH /js/react/node_modules/.bin:$PATH
@@ -18,7 +18,7 @@ RUN npm run build-lib
 RUN node --max-old-space-size=4096 `which npm` run build-demo
 
 
-FROM debian:buster-slim
+FROM docker-registry.ebrains.eu/neuralactivity/debian:buster-slim
 MAINTAINER Andrew Davison <andrew.davison@cnrs.fr>
 
 ENV DEBIAN_FRONTEND noninteractive
