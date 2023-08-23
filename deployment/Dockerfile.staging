@@ -19,7 +19,7 @@ RUN npm run build-lib
 RUN node --max-old-space-size=4096 `which npm` run build-demo
 
 
-FROM docker-registry.ebrains.eu/neuralactivity/debian:buster-slim
+FROM docker-registry.ebrains.eu/neuralactivity/debian:bullseye-slim
 MAINTAINER Andrew Davison <andrew.davison@cnrs.fr>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -34,7 +34,7 @@ ENV SITEDIR $BASEDIR/site
 COPY api/requirements.txt $BASEDIR/requirements.txt
 RUN pip3 install -r $BASEDIR/requirements.txt
 RUN pip3 install axographio  # setup.py requires numpy, so have to install separately
-ENV PYTHONPATH  /home/docker:/home/docker/site:/usr/local/lib/python3.6/dist-packages:/usr/lib/python3.6/dist-packages
+ENV PYTHONPATH  /home/docker:/home/docker/site:/usr/local/lib/python3.9/dist-packages:/usr/lib/python3.9/dist-packages
 RUN pip3 freeze
 
 COPY api $SITEDIR/api
