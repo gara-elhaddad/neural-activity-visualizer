@@ -13,6 +13,7 @@ FROM node:16-alpine as build
 WORKDIR /js/react
 ENV PATH /js/react/node_modules/.bin:$PATH
 COPY js/react ./
+COPY js/react/src/globals-staging.js ./src/globals.js
 RUN npm run ci-all
 RUN npm run build-lib
 RUN node --max-old-space-size=4096 `which npm` run build-demo

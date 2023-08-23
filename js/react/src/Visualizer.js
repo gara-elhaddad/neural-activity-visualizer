@@ -4,8 +4,8 @@ import HeaderPanel from "./HeaderPanel";
 import GraphPanel from "./GraphPanel";
 import SpikeTrainPanel from "./SpikeTrainPanel";
 import ErrorPanel from "./ErrorPanel";
+import { defaultBaseUrl } from "./globals";
 
-const defaultBaseUrl = "https://neo-viewer.brainsimulation.eu/api";
 
 function generateTimes(n, tStart, samplingPeriod) {
     const times = Array(n);
