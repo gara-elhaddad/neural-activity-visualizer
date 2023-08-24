@@ -21,7 +21,7 @@ RUN node --max-old-space-size=4096 `which npm` run build-demo
 
 FROM docker-registry.ebrains.eu/neuralactivity/debian:bookworm-slim
 
-MAINTAINER Andrew Davison <andrew.davison@cnrs.fr>
+LABEL org.opencontainers.image.authors="Andrew Davison <andrew.davison@cnrs.fr>"
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update --fix-missing; apt-get -y -q install python3-full supervisor nginx-extras git
@@ -41,7 +41,7 @@ COPY api $SITEDIR/api
 COPY homepage $SITEDIR/homepage
 COPY --from=build /js/react/demo/build $SITEDIR/react
 
-WORKDIR $SITEDIR/api
+WORKDIR $SITEDIR
 
 COPY deployment $BASEDIR/deployment
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
