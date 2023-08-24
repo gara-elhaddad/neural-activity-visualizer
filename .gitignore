@@ -51,6 +51,7 @@ dist
 # coverage
 .coverage
 cover
+env
 
 # OS generated files #
 ######################
