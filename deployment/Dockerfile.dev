@@ -24,16 +24,18 @@ FROM docker-registry.ebrains.eu/neuralactivity/debian:bookworm-slim
 MAINTAINER Andrew Davison <andrew.davison@cnrs.fr>
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update --fix-missing; apt-get -y -q install python3-pip sqlite3 supervisor nginx-extras git
+RUN apt-get update --fix-missing; apt-get -y -q install python3-full sqlite3 supervisor nginx-extras git
 RUN unset DEBIAN_FRONTEND
 
 ENV BASEDIR /home/docker
 ENV SITEDIR $BASEDIR/site
 
+RUN python3 -m venv ${BASEDIR}/pyenv
+
 COPY api/requirements.txt $BASEDIR/requirements.txt
-RUN pip3 install -r $BASEDIR/requirements.txt
+RUN ${BASEDIR}/pyenv/bin/pip install -r $BASEDIR/requirements.txt
 #RUN pip3 install axographio  # setup.py requires numpy, so have to install separately
-RUN pip3 freeze
+RUN ${BASEDIR}/pyenv/bin/pip freeze
 
 COPY api $SITEDIR/api
 COPY homepage $SITEDIR/homepage
