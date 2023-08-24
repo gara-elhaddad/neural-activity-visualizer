@@ -16,6 +16,6 @@ klusta==3.0.16
 tqdm==4.66.1
 pynwb==2.5.0
 pyEDFlib==0.1.34
-sonpy==1.9.5
+#sonpy==1.9.5 # only works with Python 3.9
 dhn_med_py==1.1.1
 zugbruecke==0.2.1
