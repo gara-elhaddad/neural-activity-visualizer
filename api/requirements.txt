@@ -1,10 +1,13 @@
-Django==2.2.28
-#django-sslserver==0.20
-djangorestframework==3.13.1  # later versions don't work with Django 2.2
-django-cors-headers==3.11.0  # later versions don't work with Django 2.2
+dateparser==1.1.8
+fastapi==0.101.1
+httpx==0.24.1
+pydantic==2.3.0
+starlette==0.27.0
+uvicorn==0.23.2
 numpy==1.25.2
-neo==0.12.0
-#git+https://github.com/NeuralEnsemble/python-neo@neoview#egg=neo
+quantities==0.14.1
+#neo==0.13.0
+git+https://github.com/NeuralEnsemble/python-neo@master#egg=neo
 h5py==3.9.0
 nixio==1.5.3
 igor2==0.5.3
