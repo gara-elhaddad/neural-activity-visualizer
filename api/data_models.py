@@ -10,6 +10,7 @@ from datetime import datetime
 from enum import Enum
 from pydantic import BaseModel, HttpUrl
 import dateparser
+import numpy as np
 from neo.io import iolist, proxyobjects
 import neo
 
@@ -84,6 +85,10 @@ class AnalogSignal(BaseModel):
         if isinstance(signal, proxyobjects.BaseProxy):
             signal = signal.load()
         assert isinstance(signal, neo.AnalogSignal)
+        # see https://stackoverflow.com/questions/6736590/fast-check-for-nan-in-numpy
+        contains_nan = np.isnan(np.min(signal.magnitude))
+        if contains_nan:
+            raise ValueError("Data contains NaN")
         data = {
             "t_start": signal.t_start.magnitude,
             "t_stop": signal.t_stop.magnitude,

@@ -120,6 +120,16 @@ class TestGetData:
         assert len(json_data["values"][0]) == 30
         assert len(json_data["values"][191]) == 30
 
+    def test_get_analogsignal_data_3(self):
+        test_file = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/asciisignal/File_asciisignal_3.txt"
+        params = urllib.parse.urlencode(
+            {"url": test_file, "segment_id": 0, "analog_signal_id": 0, "type": "AsciiSignalIO"}
+        )
+        response = test_client.get(f"/api/analogsignaldata/?{params}")
+        assert response.status_code == 400
+        json_data = response.json()
+        assert "Data contains NaN" in json_data["detail"]
+
     def test_spiketrain(self):
         test_file = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/neuroexplorer/File_neuroexplorer_1.nex"
         params = urllib.parse.urlencode(

@@ -148,7 +148,14 @@ async def get_analogsignal_data(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="IndexError on analog_signal_id",  # todo: improve this message in next API version
         )
-    return AnalogSignal.from_neo(signal, down_sample_factor)
+    try:
+        asig = AnalogSignal.from_neo(signal, down_sample_factor)
+    except ValueError as err:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(err),
+        )
+    return asig
 
 
 @router.get("/spiketraindata/")
