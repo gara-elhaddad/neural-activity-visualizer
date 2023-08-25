@@ -50,7 +50,13 @@ def download_neo_data(url):
     """
     # we first open the url to resolve any redirects and have a consistent
     # address for caching.
-    response = urlopen(url)
+    try:
+        response = urlopen(url)
+    except HTTPError as err:
+        raise HTTPException(
+            status_code=err.code,
+            detail=f"Error retrieving {url}: {err.msg}"
+        )
     resolved_url = response.geturl()
 
     file_path = get_cache_path(resolved_url)

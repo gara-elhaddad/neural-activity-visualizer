@@ -133,9 +133,11 @@ for iomodule in modules_to_test:
 print("Status code counts")
 for key in responses:
     print(key, len(responses[key]))
-
-for name, r in responses[500].items():
-    print(name, r.content.split(b"\n\n")[0])
+    print()
+    if key >= 300:
+        print(f"# {key}")
+        for name, r in responses[key].items():
+            print(name, r.content.split(b"\n\n")[0])
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 with open(f"results_gin_{timestamp}.pkl", "wb") as fp:
