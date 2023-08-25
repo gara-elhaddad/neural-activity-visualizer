@@ -30,7 +30,7 @@ class TestGetData:
     def test_get_block_data_no_type(self):
         test_file = "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf"
         params = urllib.parse.urlencode({"url": test_file})
-        response = test_client.get(f"/blockdata/?{params}")
+        response = test_client.get(f"/api/blockdata/?{params}")
         assert response.status_code == 200
         json_data = response.json()
 
@@ -68,7 +68,7 @@ class TestGetData:
         params = urllib.parse.urlencode(
             {"url": test_file, "segment_id": 1, "format": "json"}
         )
-        response = test_client.get(f"/segmentdata/?{params}")
+        response = test_client.get(f"/api/segmentdata/?{params}")
         assert response.status_code == 200
         json_data = response.json()
 
@@ -89,7 +89,7 @@ class TestGetData:
             params = urllib.parse.urlencode(
                 {"url": test_file, "segment_id": 1, "analog_signal_id": analogsignal_id}
             )
-            response = test_client.get(f"/analogsignaldata/?{params}")
+            response = test_client.get(f"/api/analogsignaldata/?{params}")
             assert response.status_code == 200
             json_data = response.json()
 
@@ -107,7 +107,7 @@ class TestGetData:
         params = urllib.parse.urlencode(
             {"url": test_file, "segment_id": 0, "type": "NeuroExplorerIO"}
         )
-        response = test_client.get(f"/spiketraindata/?{params}")
+        response = test_client.get(f"/api/spiketraindata/?{params}")
         assert response.status_code == 200
         json_data = response.json()
 
@@ -119,7 +119,7 @@ class TestGetData:
 
     def test_get_block_missing_param(self):
         # missing url test
-        response = test_client.get(f"/blockdata/")
+        response = test_client.get(f"/api/blockdata/")
         assert response.status_code == 422
         assert response.json()["detail"] == [
             {
@@ -136,7 +136,7 @@ class TestGetData:
 
     def test_get_segment_missing_param(self):
         # missing url test
-        response = test_client.get("/segmentdata/")
+        response = test_client.get("/api/segmentdata/")
         assert response.status_code == 422
         assert (
             response.json()["error"]
@@ -146,13 +146,13 @@ class TestGetData:
         # missing segment_id
         test_file = "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf"
         params = urllib.parse.urlencode({"url": test_file})
-        response = test_client.get(f"/segmentdata/?{params}")
+        response = test_client.get(f"/api/segmentdata/?{params}")
         assert response.status_code == 422
         assert response.json()["error"] == "segment_id parameter is missing"
 
         # index_error segment_id
         params = urllib.parse.urlencode({"url": test_file, "segment_id": 999})
-        response = test_client.get(f"/segmentdata/?{params}")
+        response = test_client.get(f"/api/segmentdata/?{params}")
         assert response.status_code == 400
         assert response.json()["error"] == "IndexError on segment_id"
 
@@ -160,7 +160,7 @@ class TestGetData:
         # test for missing requirement in analogsignal
 
         # missing url test
-        response = test_client.get("/analogsignaldata/")
+        response = test_client.get("/api/analogsignaldata/")
         assert response.status_code == 422
         assert (
             response.json()["error"]
@@ -170,13 +170,13 @@ class TestGetData:
         # missing segment_id
         test_file = "https://object.cscs.ch/v1/AUTH_c0a333ecf7c045809321ce9d9ecdfdea/Migliore_2018_CA1/exp_data/abf-int-bAC/Ivy_960711AHP3/96711008.abf"
         params = urllib.parse.urlencode({"url": test_file, "analog_signal_id": 0})
-        response = test_client.get(f"/analogsignaldata/?{params}")
+        response = test_client.get(f"/api/analogsignaldata/?{params}")
         assert response.status_code == 422
         assert response.json()["error"] == "segment_id parameter is missing"
 
         # missing analog_signal_id
         params = urllib.parse.urlencode({"url": test_file, "segment_id": 0})
-        response = test_client.get(f"/analogsignaldata/?{params}")
+        response = test_client.get(f"/api/analogsignaldata/?{params}")
         assert response.status_code == 422
         assert response.json()["error"] == "analog_signal_id parameter is missing"
 
@@ -184,7 +184,7 @@ class TestGetData:
         params = urllib.parse.urlencode(
             {"url": test_file, "segment_id": 999, "analog_signal_id": 0}
         )
-        response = test_client.get(f"/analogsignaldata/?{params}")
+        response = test_client.get(f"/api/analogsignaldata/?{params}")
         assert response.status_code == 400
         assert response.json()["error"] == "IndexError on segment_id"
 
@@ -192,7 +192,7 @@ class TestGetData:
         params = urllib.parse.urlencode(
             {"url": test_file, "segment_id": 0, "analog_signal_id": 999}
         )
-        response = test_client.get(f"/analogsignaldata/?{params}")
+        response = test_client.get(f"/api/analogsignaldata/?{params}")
         assert response.status_code == 400
         assert response.json()["error"] == "IndexError on analog_signal_id"
 
@@ -201,13 +201,13 @@ class TestGetData:
         # test for missing url
 
         params = urllib.parse.urlencode({"segment_id": 0, "type": "NeuroExplorerIO"})
-        response = test_client.get(f"/spiketraindata/?{params}")
+        response = test_client.get(f"/api/spiketraindata/?{params}")
         assert response.status_code == 422
         assert response.json()["error"] == "url parameter is missing"
 
         # test for missing segment_id
         params = urllib.parse.urlencode({"url": test_file, "type": "NeuroExplorerIO"})
-        response = test_client.get(f"/spiketraindata/?{params}")
+        response = test_client.get(f"/api/spiketraindata/?{params}")
         assert response.status_code == 422
         assert response.json()["error"] == "segment_id parameter is missing"
 
@@ -215,6 +215,6 @@ class TestGetData:
         params = urllib.parse.urlencode(
             {"url": test_file, "segment_id": 999, "type": "NeuroExplorerIO"}
         )
-        response = test_client.get(f"/spiketraindata/?{params}")
+        response = test_client.get(f"/api/spiketraindata/?{params}")
         assert response.status_code == 400
         assert response.json()["error"] == "IndexError on segment_id"
