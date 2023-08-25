@@ -76,7 +76,7 @@ class AnalogSignal(BaseModel):
     name: str
     times_dimensionality: str
     values_units: str
-    values: list[float]
+    values: list[float] | list[list[float]]
     times: list[float] | None = None
 
     @classmethod

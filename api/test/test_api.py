@@ -102,6 +102,24 @@ class TestGetData:
 
             assert json_data["values_units"] == value_units[analogsignal_id]
 
+    def test_get_analogsignal_data_2(self):
+        test_file = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/intan/intan_rhd_test_1.rhd"
+        params = urllib.parse.urlencode(
+            {"url": test_file, "segment_id": 0, "analog_signal_id": 0, "type": "IntanIO", "down_sample_factor": 1000}
+        )
+        response = test_client.get(f"/api/analogsignaldata/?{params}")
+        assert response.status_code == 200
+        json_data = response.json()
+        assert json_data["t_start"] == 0.0
+        assert json_data["t_stop"] == 1.0
+        assert json_data["sampling_period"] == 3.3333333333333335e-02
+        assert json_data["name"] == "RHD2000 amplifier channel"
+        assert json_data["times_dimensionality"] == "s"
+        assert json_data["values_units"] == "uV"
+        assert len(json_data["values"]) == 192
+        assert len(json_data["values"][0]) == 30
+        assert len(json_data["values"][191]) == 30
+
     def test_spiketrain(self):
         test_file = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/neuroexplorer/File_neuroexplorer_1.nex"
         params = urllib.parse.urlencode(
