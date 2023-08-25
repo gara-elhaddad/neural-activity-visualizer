@@ -7,7 +7,7 @@ Licence: MIT (see LICENSE)
 """
 
 from typing import Annotated
-from fastapi import FastAPI, Query, Request, HTTPException, status
+from fastapi import FastAPI, Query, Request, HTTPException, APIRouter, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -44,7 +44,14 @@ This project has received funding from the European Union’s Horizon 2020 Frame
 under the Specific Grant Agreements No. 785907 and No. 945539 (Human Brain Project SGA2 and SGA3).
 """
 
-app = FastAPI(title="Neo Viewer API", description=description, version="1.7")
+app = FastAPI(
+    title="Neo Viewer API",
+    description=description,
+    version="1.7",
+    openapi_url="/api/openapi.json",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc"
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -60,7 +67,9 @@ async def custom_http_exception_handler(request, exc):
     """Over-ride error handler to add "error" field, for backwards compatibility"""
     return JSONResponse(
         status_code=exc.status_code,
-        content=jsonable_encoder({"detail": exc.detail, "error": exc.detail}),
+        content=jsonable_encoder(
+            {"detail": exc.detail, "error": f"{request.url}: {exc.detail}"}
+        ),
     )
 
 
@@ -80,7 +89,10 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 
-@app.get("/")
+router = APIRouter()
+
+
+@router.get("/")
 async def info():
     """Return information about the API."""
     return {
@@ -90,7 +102,17 @@ async def info():
     }
 
 
-@app.get("/blockdata/")
+@router.get("/api/")
+async def info2():
+    """Return information about the API."""
+    return {
+        "title": app.title,
+        "description": "what's up doc?",
+        "version": app.version,
+    }
+
+
+@router.get("/blockdata/")
 async def get_block_data(
     url: Annotated[
         HttpUrl, Query(description="Location of a data file that can be read by Neo.")
@@ -115,7 +137,7 @@ async def get_block_data(
     return BlockContainer.from_neo(block, url)
 
 
-@app.get("/segmentdata/")
+@router.get("/segmentdata/")
 async def get_segment_data(
     url: Annotated[
         HttpUrl, Query(description="Location of a data file that can be read by Neo.")
@@ -152,7 +174,7 @@ async def get_segment_data(
     return Segment.from_neo(segment, url)
 
 
-@app.get("/analogsignaldata/")
+@router.get("/analogsignaldata/")
 async def get_analogsignal_data(
     url: Annotated[
         HttpUrl, Query(description="Location of a data file that can be read by Neo.")
@@ -206,7 +228,7 @@ async def get_analogsignal_data(
     return AnalogSignal.from_neo(signal, down_sample_factor)
 
 
-@app.get("/spiketraindata/")
+@router.get("/spiketraindata/")
 async def get_spiketrain_data(
     url: Annotated[
         HttpUrl, Query(description="Location of a data file that can be read by Neo.")
@@ -237,3 +259,7 @@ async def get_spiketrain_data(
             detail="IndexError on segment_id",  # todo: improve this message in next API version
         )
     return {str(i): SpikeTrain.from_neo(st) for i, st in enumerate(segment.spiketrains)}
+
+
+app.include_router(router, prefix="/api")
+app.include_router(router, prefix="/api/v1")
