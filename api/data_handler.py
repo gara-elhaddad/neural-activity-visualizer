@@ -91,7 +91,7 @@ def load_block(url, io_class_name=None):
     # todo: handle formats with multiple files, or with a directory
     if io_class_name:
         # todo: handle an invalid class name
-        io_cls = getattr(neo.io, io_class_name)
+        io_cls = getattr(neo.io, io_class_name.value)
         try:
             io = io_cls(filename=file_path)
         except ImportError:

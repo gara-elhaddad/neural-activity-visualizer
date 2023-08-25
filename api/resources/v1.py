@@ -56,7 +56,7 @@ async def get_block_data(
     but without any information about the data contained within each segment.
     """
     # here `url` is a Pydantic object, which we convert to a string
-    block = load_block(str(url), type.value)
+    block = load_block(str(url), type)
     return BlockContainer.from_neo(block, url)
 
 
@@ -86,7 +86,7 @@ async def get_segment_data(
     including metadata about the signals contained in the segment,
     but not the signal data themselves.
     """
-    block = load_block(str(url), type.value)
+    block = load_block(str(url), type)
     try:
         segment = block.segments[segment_id]
     except IndexError:
@@ -129,7 +129,7 @@ async def get_analogsignal_data(
     ] = 1,
 ) -> AnalogSignal:
     """Get an analog signal from a given segment, including both data and metadata."""
-    block = load_block(str(url), type.value)
+    block = load_block(str(url), type)
     try:
         segment = block.segments[segment_id]
     except IndexError:
@@ -173,7 +173,7 @@ async def get_spiketrain_data(
     ] = None,
 ) -> dict[str, SpikeTrain]:
     """Get the spike trains from a given segment, including both data and metadata."""
-    block = load_block(str(url), type.value)
+    block = load_block(str(url), type)
     try:
         segment = block.segments[segment_id]
     except IndexError:
