@@ -87,7 +87,7 @@ class AnalogSignal(BaseModel):
         data = {
             "t_start": signal.t_start.magnitude,
             "t_stop": signal.t_stop.magnitude,
-            "name": signal.name,
+            "name": signal.name or "",
             "times_dimensionality": str(signal.t_start.units.dimensionality),
             "values_units": str(signal.units.dimensionality),
         }

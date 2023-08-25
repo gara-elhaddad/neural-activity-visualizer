@@ -104,12 +104,23 @@ def load_block(url, io_class_name=None):
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f'Error when trying to open file with {io_class_name}: "{err}"',
             )
+        except FileNotFoundError as err:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f'Associated file not found. More details: "{err}"'
+            )
     else:
         # todo: handle IOError, if none of the IO classes work
         io = neo.io.get_io(file_path)
 
-    if io.support_lazy:
-        block = io.read_block(lazy=True)
-    else:
-        block = io.read_block()
+    try:
+        if io.support_lazy:
+            block = io.read_block(lazy=True)
+        else:
+            block = io.read_block()
+    except AssertionError as err:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f'Error when trying to open file with {io.__class__.__name__}: "{err}"',
+        )
     return block
