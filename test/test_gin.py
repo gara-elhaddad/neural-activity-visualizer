@@ -53,7 +53,7 @@ modules_to_test = [
 
 # base_data_url = "https://web.gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/"
 base_data_url = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/"
-neo_viewer_url = "https://neo-viewer-staging.brainsimulation.eu/api/"
+neo_viewer_url = "https://neo-viewer-dev.brainsimulation.eu/api/v1/"
 
 responses = defaultdict(dict)
 
@@ -80,7 +80,6 @@ for iomodule in modules_to_test:
                             + "blockdata/?"
                             + urlencode(
                                 {
-                                    "format": "json",
                                     "url": data_url,
                                     "type": obj.ioclass.__name__,
                                 }
@@ -94,7 +93,6 @@ for iomodule in modules_to_test:
                                 + "segmentdata/?"
                                 + urlencode(
                                     {
-                                        "format": "json",
                                         "url": data_url,
                                         "segment_id": "0",
                                         "type": obj.ioclass.__name__,
@@ -109,7 +107,6 @@ for iomodule in modules_to_test:
                                     + "analogsignaldata/?"
                                     + urlencode(
                                         {
-                                            "format": "json",
                                             "url": data_url,
                                             "segment_id": "0",
                                             "analog_signal_id": "0",
