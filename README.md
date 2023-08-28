@@ -1,8 +1,8 @@
 # Neural Activity Visualizer
 
-A JavaScript component for visualizing neural activity data (analog signals, 
-spike trains etc.) stored in any of the file formats supported by the 
-[Neo](http://neuralensemble.org/neo) library. Implementations are available in 
+A JavaScript component for visualizing neural activity data (analog signals,
+spike trains etc.) stored in any of the file formats supported by the
+[Neo](http://neuralensemble.org/neo) library. Implementations are available in
 both AngularJS and ReactJS.
 
 Homepage:
@@ -15,7 +15,7 @@ The component was developed to produce graphical representations of neural activ
 
 ## AngularJS (v1) component
 
-Live demo: 
+Live demo:
 https://neo-viewer.brainsimulation.eu/angularjs
 
 
@@ -38,7 +38,7 @@ Instructions for doing this are [here](/api/README.md#deployment).
 
 ## Reference: the file server REST API
 
-See [here](https://neo-viewer.brainsimulation.eu/api-docs).
+See [here](https://neo-viewer.brainsimulation.eu/api/docs).
 
 
 <div><img src="eu_logo.jpg" alt="EU Logo" width="15%" align="right"></div>

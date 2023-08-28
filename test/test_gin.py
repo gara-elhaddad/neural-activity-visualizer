@@ -53,9 +53,13 @@ modules_to_test = [
 
 # base_data_url = "https://web.gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/"
 base_data_url = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/"
-neo_viewer_url = "https://neo-viewer-staging.brainsimulation.eu/api/"
+neo_viewer_url = "https://neo-viewer-dev.brainsimulation.eu/api/v1/"
 
-responses = defaultdict(dict)
+responses = {
+    "block": defaultdict(dict),
+    "segment": defaultdict(dict),
+    "signal": defaultdict(dict)
+}
 
 start_time = time()
 for iomodule in modules_to_test:
@@ -80,7 +84,6 @@ for iomodule in modules_to_test:
                             + "blockdata/?"
                             + urlencode(
                                 {
-                                    "format": "json",
                                     "url": data_url,
                                     "type": obj.ioclass.__name__,
                                 }
@@ -88,13 +91,13 @@ for iomodule in modules_to_test:
                         )
                         response = requests.get(block_url)
                         block_status_code = response.status_code
-                        if response.status_code == 200:
+                        responses["block"][block_status_code][filename] = response
+                        if block_status_code == 200:
                             segment_url = (
                                 neo_viewer_url
                                 + "segmentdata/?"
                                 + urlencode(
                                     {
-                                        "format": "json",
                                         "url": data_url,
                                         "segment_id": "0",
                                         "type": obj.ioclass.__name__,
@@ -103,13 +106,13 @@ for iomodule in modules_to_test:
                             )
                             response2 = requests.get(segment_url)
                             segment_status_code = response2.status_code
+                            responses["segment"][segment_status_code][filename] = response2
                             if response2.status_code == 200:
                                 signal_url = (
                                     neo_viewer_url
                                     + "analogsignaldata/?"
                                     + urlencode(
                                         {
-                                            "format": "json",
                                             "url": data_url,
                                             "segment_id": "0",
                                             "analog_signal_id": "0",
@@ -119,6 +122,7 @@ for iomodule in modules_to_test:
                                 )
                                 response3 = requests.get(signal_url)
                                 signal_status_code = response3.status_code
+                                responses["signal"][signal_status_code][filename] = response3
                             else:
                                 signal_status_code = "-"
                         else:
@@ -131,14 +135,21 @@ for iomodule in modules_to_test:
                             segment_status_code,
                             signal_status_code,
                         )
-                        responses[response.status_code][filename] = response
 
-print("Status code counts")
-for key in responses:
-    print(key, len(responses[key]))
 
-for name, r in responses[500].items():
-    print(name, r.content.split(b"\n\n")[0])
+print("\n# Status code counts")
+for endpoint in ("block", "segment", "signal"):
+    print(f"## {endpoint}")
+    for key in responses[endpoint]:
+        print(key, len(responses[endpoint][key]))
+
+print("\n\n# Error messages")
+for endpoint in ("block", "segment", "signal"):
+    for key in responses[endpoint]:
+        if key >= 300:
+            print(f"\n## {key} {endpoint}")
+            for name, r in responses[endpoint][key].items():
+                print(name, r.content.split(b"\n\n")[0])
 
 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 with open(f"results_gin_{timestamp}.pkl", "wb") as fp:
