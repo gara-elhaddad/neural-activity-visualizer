@@ -36,7 +36,7 @@ def parse_datetime(datetime_repr):
         return None
 
 
-exclude = ["neo.io.exampleio", "neo.io.nixio_fr"]
+exclude = ["neo.io.exampleio", "neo.io.nixio_fr", "neo.io.neurosharectypesio"]
 
 IOModule = Enum(
     "IOModule",
