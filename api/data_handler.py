@@ -98,7 +98,7 @@ def load_block(url, io_class_name=None):
                 status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,  # maybe use 501 Not Implemented?
                 detail=f"This server does not have the {io_class_name} module installed.",
             )
-        except (RuntimeError, TypeError) as err:  # RuntimeError from NixIO, TypeError from TdtIO
+        except (RuntimeError, TypeError, OSError) as err:  # RuntimeError from NixIO, TypeError from TdtIO, OSError from EDFIO
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f'Error when trying to open file with {io_class_name}: "{err}"',
@@ -117,7 +117,7 @@ def load_block(url, io_class_name=None):
             block = io.read_block(lazy=True)
         else:
             block = io.read_block()
-    except AssertionError as err:
+    except (AssertionError, ValueError, IndexError, KeyError, AttributeError) as err:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f'Error when trying to open file with {io.__class__.__name__}: "{err}"',

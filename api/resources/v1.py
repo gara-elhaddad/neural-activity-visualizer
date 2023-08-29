@@ -150,7 +150,7 @@ async def get_analogsignal_data(
         )
     try:
         asig = AnalogSignal.from_neo(signal, down_sample_factor)
-    except ValueError as err:
+    except (ValueError, OSError) as err:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(err),
