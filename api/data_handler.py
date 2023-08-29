@@ -10,6 +10,7 @@ import os.path
 import hashlib
 from urllib.request import urlopen, urlretrieve, HTTPError
 from urllib.parse import urlparse, urlunparse
+import zipfile
 from fastapi import HTTPException, status
 import neo.io
 import quantities as pq
@@ -58,20 +59,21 @@ def list_files_to_download(resolved_url, cache_dir, io_cls=None):
         root_path, ext = os.path.splitext(main_file)
         io_mode = getattr(io_cls, "rawmode", None)
         if io_mode == "one-dir":
-            # In general, we don't know the names of the individual files
-            # and have no way to get a directory listing from a URL
-            # so we raise an exception
-            if io_cls.__name__ in ("PhyIO"):
-                # for the exceptions, resolved_url must represent a directory
-                raise NotImplementedError  # todo: for these ios, the file names are known
-            else:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=(
-                        "Cannot download files from a URL representing a directory. "
-                        "Please provide the URL of a zip or tar archive of the directory."
+            if not resolved_url.endswith(".zip"):
+                # In general, we don't know the names of the individual files
+                # and have no way to get a directory listing from a URL
+                # so we raise an exception
+                if io_cls.__name__ in ("PhyIO"):
+                    # for the exceptions, resolved_url must represent a directory
+                    raise NotImplementedError  # todo: for these ios, the file names are known
+                else:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=(
+                            "Cannot download files from a URL representing a directory. "
+                            "Please provide the URL of a zip or tar archive of the directory."
+                        )
                     )
-                )
         elif io_mode == "multi-file":
             # Here the resolved_url represents a single file, with or without the file extension.
             # By taking the base/root path and adding various extensions we get a list of files to download
@@ -153,8 +155,22 @@ def download_neo_data(url, io_cls=None):
         main_path = files_to_download[0][1]
     else:
         main_path = os.path.join(cache_dir, main_file)
+    if main_path.endswith(".zip"):
+        main_path = get_archive_dir(main_path, cache_dir)
     return main_path
 
+
+def get_archive_dir(archive_path, cache_dir):
+    with zipfile.ZipFile(archive_path) as zf:
+        contents = zf.infolist()
+        dir_name = contents[0].filename.strip("/")
+        main_path = os.path.join(cache_dir, dir_name)
+        if not os.path.exists(main_path):
+            zf.extractall(path=cache_dir)
+    # we are assuming the zipfile unpacks to a single directory
+    # todo: check this is the case, and if not either raise an Exception
+    #       or create our own directory to unpack in to
+    return main_path
 
 
 extra_kwargs = {

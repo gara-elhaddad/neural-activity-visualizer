@@ -14,9 +14,9 @@ from ..main import app
 
 test_client = TestClient(app)
 
-base_data_url = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/"
+gin_data_url = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/master/"
 
-test_data = {
+test_data_gin = {
     200: {
         "AsciiSpikeTrainIO": ["asciispiketrain/File_ascii_spiketrain_1.txt"],
         "AxographIO": [
@@ -230,7 +230,8 @@ test_data = {
             "neuralynx/Cheetah_v4.0.2/original_data",
             "neuralynx/Cheetah_v5.4.0/original_data",
             "neuralynx/Cheetah_v5.5.1/original_data",
-            "neuralynx/Cheetah_v5.6.3/original_data",
+            # "neuralynx/Cheetah_v5.6.3/original_data",
+            "https://data-proxy.ebrains.eu/api/v1/buckets/myspace/neo-viewer-test-data/ephy_testing_data_neuralynx_Cheetah_v5.6.3_original_data.zip",
             "neuralynx/Cheetah_v5.7.4/original_data",
             "neuralynx/Cheetah_v6.3.2/incomplete_blocks",
         ],
@@ -263,47 +264,59 @@ test_data = {
     },
 }
 
+test_data_other = {
+    200: {
+        "NeuralynxIO": [
+            "https://data-proxy.ebrains.eu/api/v1/buckets/myspace/neo-viewer-test-data/ephy_testing_data_neuralynx_Cheetah_v5.6.3_original_data.zip",
+        ]
+    }
+}
+
 expected_success = [
-    (io_cls, test_file)
-    for io_cls, test_files in test_data[200].items()
+    (io_cls, f"{gin_data_url}{test_file}")
+    for io_cls, test_files in test_data_gin[200].items()
     for test_file in test_files
+] + [
+    (io_cls, test_file_url)
+    for io_cls, test_files in test_data_other[200].items()
+    for test_file_url in test_files
 ]
 
 expected_400_failure_block = [
-    (io_cls, test_file)
-    for io_cls, test_files in test_data[400]["block"].items()
+    (io_cls, f"{gin_data_url}{test_file}")
+    for io_cls, test_files in test_data_gin[400]["block"].items()
     for test_file in test_files
 ]
 
 expected_400_failure_segment = [
-    (io_cls, test_file)
-    for io_cls, test_files in test_data[400]["segment"].items()
+    (io_cls, f"{gin_data_url}{test_file}")
+    for io_cls, test_files in test_data_gin[400]["segment"].items()
     for test_file in test_files
 ]
 
 expected_400_failure_signal = [
-    (io_cls, test_file)
-    for io_cls, test_files in test_data[400]["signal"].items()
+    (io_cls, f"{gin_data_url}{test_file}")
+    for io_cls, test_files in test_data_gin[400]["signal"].items()
     for test_file in test_files
 ]
 
 expected_415_failure = [
-    (io_cls, test_file)
-    for io_cls, test_files in test_data[415].items()
+    (io_cls, f"{gin_data_url}{test_file}")
+    for io_cls, test_files in test_data_gin[415].items()
     for test_file in test_files
 ]
 
 expected_500_failure = [
-    (io_cls, test_file)
-    for io_cls, test_files in test_data[500].items()
+    (io_cls, f"{gin_data_url}{test_file}")
+    for io_cls, test_files in test_data_gin[500].items()
     for test_file in test_files
 ]
 
 
-@pytest.mark.parametrize("io_cls,test_file", expected_success)
-def test_datasets_expected_success(io_cls, test_file):
+@pytest.mark.parametrize("io_cls,test_file_url", expected_success)
+def test_datasets_expected_success(io_cls, test_file_url):
     encode = urllib.parse.urlencode
-    params = {"url": f"{base_data_url}{test_file}", "type": io_cls}
+    params = {"url": test_file_url, "type": io_cls}
     response = test_client.get(f"/api/blockdata/?{encode(params)}")
     assert response.status_code == 200
 
@@ -323,10 +336,10 @@ def test_datasets_expected_success(io_cls, test_file):
     # todo: test irregularlysampledsignals - do we have any cases in the example data?
 
 
-@pytest.mark.parametrize("io_cls,test_file", expected_400_failure_block)
-def test_datasets_expected_400_failure_blockdata(io_cls, test_file):
+@pytest.mark.parametrize("io_cls,test_file_url", expected_400_failure_block)
+def test_datasets_expected_400_failure_blockdata(io_cls, test_file_url):
     encode = urllib.parse.urlencode
-    params = {"url": f"{base_data_url}{test_file}", "type": io_cls}
+    params = {"url": test_file_url, "type": io_cls}
     response = test_client.get(f"/api/blockdata/?{encode(params)}")
 
     if response.status_code != 400:
@@ -336,10 +349,10 @@ def test_datasets_expected_400_failure_blockdata(io_cls, test_file):
         pytest.xfail(response.json()["detail"])
 
 
-@pytest.mark.parametrize("io_cls,test_file", expected_400_failure_segment)
-def test_datasets_expected_400_failure_segmentdata(io_cls, test_file):
+@pytest.mark.parametrize("io_cls,test_file_url", expected_400_failure_segment)
+def test_datasets_expected_400_failure_segmentdata(io_cls, test_file_url):
     encode = urllib.parse.urlencode
-    params = {"url": f"{base_data_url}{test_file}", "type": io_cls}
+    params = {"url": test_file_url, "type": io_cls}
     response = test_client.get(f"/api/blockdata/?{encode(params)}")
     assert response.status_code == 200
 
@@ -351,10 +364,10 @@ def test_datasets_expected_400_failure_segmentdata(io_cls, test_file):
         pytest.xfail(response2.json()["detail"])
 
 
-@pytest.mark.parametrize("io_cls,test_file", expected_400_failure_signal)
-def test_datasets_expected_400_failure_analogsignaldata(io_cls, test_file):
+@pytest.mark.parametrize("io_cls,test_file_url", expected_400_failure_signal)
+def test_datasets_expected_400_failure_analogsignaldata(io_cls, test_file_url):
     encode = urllib.parse.urlencode
-    params = {"url": f"{base_data_url}{test_file}", "type": io_cls}
+    params = {"url": test_file_url, "type": io_cls}
     response = test_client.get(f"/api/blockdata/?{encode(params)}")
     assert response.status_code == 200
 
@@ -372,10 +385,10 @@ def test_datasets_expected_400_failure_analogsignaldata(io_cls, test_file):
         pytest.xfail(response3.json()["detail"])
 
 
-@pytest.mark.parametrize("io_cls,test_file", expected_415_failure)
-def test_datasets_expected_415_failure(io_cls, test_file):
+@pytest.mark.parametrize("io_cls,test_file_url", expected_415_failure)
+def test_datasets_expected_415_failure(io_cls, test_file_url):
     encode = urllib.parse.urlencode
-    params = {"url": f"{base_data_url}{test_file}", "type": io_cls}
+    params = {"url": test_file_url, "type": io_cls}
     response = test_client.get(f"/api/blockdata/?{encode(params)}")
     if response.status_code != 415:
         raise Exception("error")
@@ -383,10 +396,10 @@ def test_datasets_expected_415_failure(io_cls, test_file):
         pytest.xfail(response.json()["detail"])
 
 
-@pytest.mark.parametrize("io_cls,test_file", expected_500_failure)
-def test_datasets_expected_500_failure(io_cls, test_file):
+@pytest.mark.parametrize("io_cls,test_file_url", expected_500_failure)
+def test_datasets_expected_500_failure(io_cls, test_file_url):
     encode = urllib.parse.urlencode
-    params = {"url": f"{base_data_url}{test_file}", "type": io_cls}
+    params = {"url": test_file_url, "type": io_cls}
     response = test_client.get(f"/api/blockdata/?{encode(params)}")
     assert response.status_code == 200
 
