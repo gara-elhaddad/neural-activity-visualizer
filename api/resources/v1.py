@@ -20,7 +20,7 @@ from ..data_models import (
     SpikeTrain,
     BlockContainer,
 )
-from ..data_handler import load_block
+from ..data_handler import load_blocks
 
 router = APIRouter()
 
@@ -56,8 +56,8 @@ async def get_block_data(
     but without any information about the data contained within each segment.
     """
     # here `url` is a Pydantic object, which we convert to a string
-    block = load_block(str(url), type)
-    return BlockContainer.from_neo(block, url)
+    blocks = load_blocks(str(url), type)
+    return BlockContainer.from_neo(blocks, url)
 
 
 @router.get("/segmentdata/")
@@ -71,6 +71,12 @@ async def get_segment_data(
             description="Index of the segment for which metadata should be returned."
         ),
     ],
+    block_id: Annotated[
+        int,
+        Query(
+            description="Index of the block for which metadata should be returned."
+        ),
+    ] = 0,
     type: Annotated[
         IOModule,
         Query(
@@ -86,7 +92,13 @@ async def get_segment_data(
     including metadata about the signals contained in the segment,
     but not the signal data themselves.
     """
-    block = load_block(str(url), type)
+    try:
+        block = load_blocks(str(url), type)[block_id]
+    except IndexError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="IndexError on block_id",  # todo: improve this message in next API version
+        )
     try:
         segment = block.segments[segment_id]
     except IndexError:
@@ -109,6 +121,12 @@ async def get_analogsignal_data(
     analog_signal_id: Annotated[
         int, Query(description="Index of the signal within the segment.")
     ],
+    block_id: Annotated[
+        int,
+        Query(
+            description="Index of the block for which metadata should be returned."
+        ),
+    ] = 0,
     type: Annotated[
         IOModule,
         Query(
@@ -129,7 +147,13 @@ async def get_analogsignal_data(
     ] = 1,
 ) -> AnalogSignal:
     """Get an analog signal from a given segment, including both data and metadata."""
-    block = load_block(str(url), type)
+    try:
+        block = load_blocks(str(url), type)[block_id]
+    except IndexError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="IndexError on block_id",  # todo: improve this message in next API version
+        )
     try:
         segment = block.segments[segment_id]
     except IndexError:
@@ -169,6 +193,12 @@ async def get_spiketrain_data(
             description="Index of the segment for which spike trains should be returned."
         ),
     ],
+    block_id: Annotated[
+        int,
+        Query(
+            description="Index of the block for which metadata should be returned."
+        ),
+    ] = 0,
     type: Annotated[
         IOModule,
         Query(
@@ -180,7 +210,13 @@ async def get_spiketrain_data(
     ] = None,
 ) -> dict[str, SpikeTrain]:
     """Get the spike trains from a given segment, including both data and metadata."""
-    block = load_block(str(url), type)
+    try:
+        block = load_blocks(str(url), type)[block_id]
+    except IndexError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="IndexError on block_id",  # todo: improve this message in next API version
+        )
     try:
         segment = block.segments[segment_id]
     except IndexError:

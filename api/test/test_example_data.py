@@ -18,6 +18,7 @@ base_data_url = "https://gin.g-node.org/NeuralEnsemble/ephy_testing_data/raw/mas
 
 test_data = {
     200: {
+        "AsciiSpikeTrainIO": ["asciispiketrain/File_ascii_spiketrain_1.txt"],
         "AxographIO": [
             "axograph/AxoGraph_Graph_File",
             "axograph/AxoGraph_Digitized_File",
@@ -101,7 +102,6 @@ test_data = {
     },
     400: {
         "block": {
-            "AsciiSpikeTrainIO": ["asciispiketrain/File_ascii_spiketrain_1.txt"],
             "BrainVisionIO": [
                 "brainvision/File_brainvision_1.vhdr",
                 "brainvision/File_brainvision_2.vhdr",
@@ -128,7 +128,7 @@ test_data = {
             "NeuroScopeIO": ["neuroscope/test1/test1.xml"],
             "NWBIO": [
                 "nwb/AbfInterface_3.nwb",
-                "nwb/AxonaLFPDataInterface.nwb",
+                #"nwb/AxonaLFPDataInterface.nwb",
                 "nwb/AxonaRecordingInterface.nwb",
                 "nwb/BlackrockSortingInterface.nwb",
                 "nwb/ecephys_tutorial_v2.5.0.nwb",
@@ -136,6 +136,13 @@ test_data = {
         },
         "segment": {
             "EDFIO": ["edf/edf+C.edf"],
+            "NWBIO": [
+                #"nwb/AbfInterface_3.nwb",
+                "nwb/AxonaLFPDataInterface.nwb",
+                #"nwb/AxonaRecordingInterface.nwb",
+                #"nwb/BlackrockSortingInterface.nwb",
+                #"nwb/ecephys_tutorial_v2.5.0.nwb",
+            ],
         },
         "signal": {
             "AsciiSignalIO": [
@@ -297,10 +304,16 @@ def test_datasets_expected_success(io_cls, test_file):
     response2 = test_client.get(f"/api/segmentdata/?{encode(params)}")
     assert response2.status_code == 200
 
-    params["analog_signal_id"] = 0
-    params["down_sample_factor"] = 10
-    response3 = test_client.get(f"/api/analogsignaldata/?{encode(params)}")
-    assert response3.status_code == 200
+    segment_data = response2.json()
+    if segment_data["spiketrains"]:
+        response3 = test_client.get(f"/api/spiketraindata/?{encode(params)}")
+        assert response3.status_code == 200
+    if segment_data["analogsignals"]:
+        params["analog_signal_id"] = 0
+        params["down_sample_factor"] = 10
+        response4 = test_client.get(f"/api/analogsignaldata/?{encode(params)}")
+        assert response4.status_code == 200
+    # todo: test irregularlysampledsignals - do we have any cases in the example data?
 
 
 @pytest.mark.parametrize("io_cls,test_file", expected_400_failure_block)

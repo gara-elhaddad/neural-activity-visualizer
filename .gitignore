@@ -52,6 +52,7 @@ dist
 .coverage
 cover
 env
+api/download_cache
 
 # OS generated files #
 ######################

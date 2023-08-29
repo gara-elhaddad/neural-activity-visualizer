@@ -144,7 +144,7 @@ def download_neo_data(url, io_cls=None):
     return main_path
 
 
-def load_block(url, io_class_name=None):
+def load_blocks(url, io_class_name=None):
     """
     Load the first block from the data file at the given URL.
 
@@ -184,12 +184,12 @@ def load_block(url, io_class_name=None):
 
     try:
         if io.support_lazy:
-            block = io.read_block(lazy=True)
+            blocks = io.read(lazy=True)
         else:
-            block = io.read_block()
+            blocks = io.read()
     except (AssertionError, ValueError, IndexError, KeyError, AttributeError) as err:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f'Error when trying to open file with {io.__class__.__name__}: "{err}"',
         )
-    return block
+    return blocks

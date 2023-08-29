@@ -348,8 +348,8 @@ class BlockContainer(BaseModel):
     block: list[Block]
 
     @classmethod
-    def from_neo(cls, neo_block, data_file_ur):
-        return cls(block=[Block.from_neo(neo_block, data_file_ur)])
+    def from_neo(cls, neo_blocks, data_file_ur):
+        return cls(block=[Block.from_neo(nb, data_file_ur) for nb in neo_blocks])
 
     model_config = {  # todo: include all fields
         "json_schema_extra": {

@@ -20,7 +20,7 @@ from .metadata import title, description
 app = FastAPI(
     title=title,
     description=description,
-    version="1.7",
+    version="1.8",
     openapi_url="/api/openapi.json",
     docs_url="/api/docs",
     redoc_url="/api/redoc"
