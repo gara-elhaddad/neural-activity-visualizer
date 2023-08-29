@@ -40,9 +40,26 @@ test_data = {
             "axon/File_axon_7.abf",
             "axon/test_file_edr3.abf",
         ],
+        "AxonaIO": [
+            "axona/axona_raw.set",
+            "axona/dataset_unit_spikes/20140815-180secs.set",
+            "axona/dataset_multi_modal/axona_sample.set",
+        ],
         "BCI2000IO": ["bci2000/eeg1_1.dat", "bci2000/eeg1_2.dat", "bci2000/eeg1_3.dat"],
         "BiocamIO": ["biocam/biocam_hw3.0_fw1.6.brw"],
+        "BlackrockIO": [
+            "blackrock/FileSpec2.3001.nev",
+            "blackrock/blackrock_2_1/l101210-001.nev",
+            "blackrock/blackrock_3_0/file_spec_3_0.nev",
+        ],
         "BlkIO": [],
+        "BrainVisionIO": [
+            "brainvision/File_brainvision_1.vhdr",
+            "brainvision/File_brainvision_2.vhdr",
+            "brainvision/File_brainvision_3_float32.vhdr",
+            "brainvision/File_brainvision_3_int16.vhdr",
+            "brainvision/File_brainvision_3_int32.vhdr",
+        ],
         "BrainwareDamIO": [
             "brainwaredam/block_300ms_4rep_1clust_part_ch1.dam",
             "brainwaredam/interleaved_500ms_5rep_ch2.dam",
@@ -51,8 +68,20 @@ test_data = {
             "brainwaredam/random_500ms_12rep_noclust_part_ch2.dam",
             "brainwaredam/sequence_500ms_5rep_ch2.dam",
         ],
+        "BrainwareF32IO": [
+            "brainwaref32/block_300ms_4rep_1clust_part_ch1.f32",
+            "brainwaref32/block_500ms_5rep_empty_fullclust_ch1.f32",
+            "brainwaref32/block_500ms_5rep_empty_partclust_ch1.f32",
+            "brainwaref32/interleaved_500ms_5rep_ch2.f32",
+            "brainwaref32/interleaved_500ms_5rep_nospikes_ch1.f32",
+            "brainwaref32/multi_500ms_mulitrep_ch1.f32",
+            "brainwaref32/random_500ms_12rep_noclust_part_ch2.f32",
+            "brainwaref32/sequence_500ms_5rep_ch2.f32",
+        ],
         "BrainwareSrcIO": [],
         "CedIO": [],
+        "EDFIO": ["edf/edf+C.edf"],
+        "ElanIO": ["elan/File_elan_1.eeg"],
         "ElphyIO": [
             "elphy/DATA1.DAT",
             "elphy/ElphyExample.DAT",
@@ -67,14 +96,29 @@ test_data = {
         ],
         "MicromedIO": ["micromed/File_micromed_1.TRC"],
         "NeoMatlabIO": [],
+        "NestIO": [
+            "nest/0gid-1time-1256-0.gdf",
+            "nest/0gid-1time-2Vm-1259-0.dat",
+            "nest/0gid-1time-2Vm-3Iex-4Iin-1264-0.dat",
+            "nest/0gid-1time-2Vm-3gex-4gin-1260-0.dat",
+            "nest/0gid-1time-2gex-1262-0.dat",
+            "nest/0gid-1time-2gex-3Vm-1261-0.dat",
+            "nest/0gid-1time_in_steps-1258-0.gdf",
+            "nest/0gid-1time_in_steps-2Vm-1263-0.dat",
+            # "nest/0time-1255-0.gdf",
+            # "nest/0time_in_steps-1257-0.gdf",
+            # "nest/N1-0Vm-1267-0.dat",
+            "nest/N1-0gid-1time-2Vm-1265-0.dat",
+            # "nest/N1-0time-1Vm-1266-0.dat",
+        ],
         "NeuroExplorerIO": [
             "neuroexplorer/File_neuroexplorer_1.nex",
             "neuroexplorer/File_neuroexplorer_2.nex",
         ],
         "NixIO": ["nix/generated_file_neo0.12.0.nix"],
         "PlexonIO": [
-            # "plexon/File_plexon_1.plx",
-            # "plexon/File_plexon_2.plx",
+            "plexon/File_plexon_1.plx",
+            "plexon/File_plexon_2.plx",
             "plexon/File_plexon_3.plx",
         ],
         "RawBinarySignalIO": [
@@ -83,7 +127,7 @@ test_data = {
         "RawMCSIO": ["rawmcs/raw_mcs_with_header_1.raw"],
         "Spike2IO": [
             "spike2/File_spike2_1.smr",
-            # "spike2/File_spike2_2.smr",
+            "spike2/File_spike2_2.smr",
             "spike2/File_spike2_3.smr",
             "spike2/130322-1LY.smr",
             "spike2/multi_sampling.smr",
@@ -102,46 +146,41 @@ test_data = {
     },
     400: {
         "block": {
-            "BrainVisionIO": [
-                "brainvision/File_brainvision_1.vhdr",
-                "brainvision/File_brainvision_2.vhdr",
-                "brainvision/File_brainvision_3_float32.vhdr",
-                "brainvision/File_brainvision_3_int16.vhdr",
-                "brainvision/File_brainvision_3_int32.vhdr",
-            ],
-            "ElanIO": ["elan/File_elan_1.eeg"],
             "NestIO": [
-                "nest/0gid-1time-1256-0.gdf",
-                "nest/0gid-1time-2Vm-1259-0.dat",
-                "nest/0gid-1time-2Vm-3Iex-4Iin-1264-0.dat",
-                "nest/0gid-1time-2Vm-3gex-4gin-1260-0.dat",
-                "nest/0gid-1time-2gex-1262-0.dat",
-                "nest/0gid-1time-2gex-3Vm-1261-0.dat",
-                "nest/0gid-1time_in_steps-1258-0.gdf",
-                "nest/0gid-1time_in_steps-2Vm-1263-0.dat",
-                "nest/0time-1255-0.gdf",
+                # "nest/0gid-1time-1256-0.gdf",
+                # "nest/0gid-1time-2Vm-1259-0.dat",
+                # "nest/0gid-1time-2Vm-3Iex-4Iin-1264-0.dat",
+                # "nest/0gid-1time-2Vm-3gex-4gin-1260-0.dat",
+                # "nest/0gid-1time-2gex-1262-0.dat",
+                # "nest/0gid-1time-2gex-3Vm-1261-0.dat",
+                # "nest/0gid-1time_in_steps-1258-0.gdf",
+                # "nest/0gid-1time_in_steps-2Vm-1263-0.dat",
+                "nest/0time-1255-0.gdf",  #  "Can not sort by column ID 1. File contains only 1 columns"
                 "nest/0time_in_steps-1257-0.gdf",
                 "nest/N1-0Vm-1267-0.dat",
-                "nest/N1-0gid-1time-2Vm-1265-0.dat",
+                # "nest/N1-0gid-1time-2Vm-1265-0.dat",
                 "nest/N1-0time-1Vm-1266-0.dat",
             ],
-            "NeuroScopeIO": ["neuroscope/test1/test1.xml"],
+            "NeuroScopeIO": [
+                # xml file contains addresses of other files,
+                # so we could read it and download them
+                "neuroscope/test1/test1.xml"
+            ],
             "NWBIO": [
                 "nwb/AbfInterface_3.nwb",
-                #"nwb/AxonaLFPDataInterface.nwb",
+                # "nwb/AxonaLFPDataInterface.nwb",
                 "nwb/AxonaRecordingInterface.nwb",
                 "nwb/BlackrockSortingInterface.nwb",
                 "nwb/ecephys_tutorial_v2.5.0.nwb",
             ],
         },
         "segment": {
-            "EDFIO": ["edf/edf+C.edf"],
             "NWBIO": [
-                #"nwb/AbfInterface_3.nwb",
+                # "nwb/AbfInterface_3.nwb",
                 "nwb/AxonaLFPDataInterface.nwb",
-                #"nwb/AxonaRecordingInterface.nwb",
-                #"nwb/BlackrockSortingInterface.nwb",
-                #"nwb/ecephys_tutorial_v2.5.0.nwb",
+                # "nwb/AxonaRecordingInterface.nwb",
+                # "nwb/BlackrockSortingInterface.nwb",
+                # "nwb/ecephys_tutorial_v2.5.0.nwb",
             ],
         },
         "signal": {
@@ -149,37 +188,10 @@ test_data = {
                 "asciisignal/File_asciisignal_2.txt",  # 'Data contains NaN'
                 "asciisignal/File_asciisignal_3.txt",  # 'Data contains NaN'
             ],
-            "AxonaIO": [
-                "axona/axona_raw.set",  # 'IndexError on analog_signal_id'
-                "axona/dataset_unit_spikes/20140815-180secs.set",  # 'IndexError on analog_signal_id'
-                "axona/dataset_multi_modal/axona_sample.set",  # 'IndexError on analog_signal_id'
-            ],
-            "BrainwareF32IO": [
-                "brainwaref32/block_300ms_4rep_1clust_part_ch1.f32",  # 'IndexError on analog_signal_id'
-                "brainwaref32/block_500ms_5rep_empty_fullclust_ch1.f32",
-                "brainwaref32/block_500ms_5rep_empty_partclust_ch1.f32",
-                "brainwaref32/interleaved_500ms_5rep_ch2.f32",
-                "brainwaref32/interleaved_500ms_5rep_nospikes_ch1.f32",
-                "brainwaref32/multi_500ms_mulitrep_ch1.f32",
-                "brainwaref32/random_500ms_12rep_noclust_part_ch2.f32",
-                "brainwaref32/sequence_500ms_5rep_ch2.f32",
-            ],
             "MaxwellIO": [
+                # OSError: Can't read data (can't open directory: /usr/local/hdf5/lib/plugin)
                 "maxwell/MaxOne_data/Record/000011/data.raw.h5",
                 "maxwell/MaxTwo_data/Network/000028/data.raw.h5",
-            ],
-            "PlexonIO": [
-                "plexon/File_plexon_1.plx",  # 'IndexError on analog_signal_id'
-                "plexon/File_plexon_2.plx",  # 'IndexError on analog_signal_id'
-                # "plexon/File_plexon_3.plx",
-            ],
-            "Spike2IO": [
-                # "spike2/File_spike2_1.smr",
-                "spike2/File_spike2_2.smr",  # 'IndexError on analog_signal_id'
-                # "spike2/File_spike2_3.smr",
-                # "spike2/130322-1LY.smr",
-                # "spike2/multi_sampling.smr",
-                # "spike2/Two-mice-bigfile-test000.smr",
             ],
         },
     },
@@ -203,11 +215,6 @@ test_data = {
     500: {},
     "dir": {
         "AlphaOmegaIO": ["alphaomega/mpx_map_version4"],
-        "BlackrockIO": [
-            "blackrock/FileSpec2.3001",
-            "blackrock/blackrock_2_1/l101210-001",
-            "blackrock/blackrock_3_0/file_spec_3_0",
-        ],
         "KlustaKwikIO": [
             "klustakwik/test2/base",
             "klustakwik/test2/base2",
@@ -321,6 +328,7 @@ def test_datasets_expected_400_failure_blockdata(io_cls, test_file):
     encode = urllib.parse.urlencode
     params = {"url": f"{base_data_url}{test_file}", "type": io_cls}
     response = test_client.get(f"/api/blockdata/?{encode(params)}")
+
     if response.status_code != 400:
         raise Exception("error")
     # assert response.status_code == 200  # expected fail
@@ -357,6 +365,7 @@ def test_datasets_expected_400_failure_analogsignaldata(io_cls, test_file):
     params["analog_signal_id"] = 0
     params["down_sample_factor"] = 10
     response3 = test_client.get(f"/api/analogsignaldata/?{encode(params)}")
+
     if response3.status_code != 400:
         raise Exception("error")
     if response3.status_code != 200:
