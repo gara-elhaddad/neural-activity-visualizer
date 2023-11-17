@@ -1,13 +1,3 @@
-#
-# Build an image for deploying the Neo web viewer REST API
-#
-# To build the image, from the parent directory:
-#   docker build -t neo-viewer -f deployment/Dockerfile .
-#
-# To run the application:
-#  docker run -d -p 443 neo-viewer
-#
-
 FROM docker-registry.ebrains.eu/neuralactivity/node:16-alpine as build
 
 WORKDIR /js/react
@@ -50,5 +40,5 @@ RUN ln -s $BASEDIR/deployment/supervisor-app.conf /etc/supervisor/conf.d/
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
-EXPOSE 80 443
+EXPOSE 80
 CMD ["supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisor-app.conf"]
